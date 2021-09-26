@@ -1,9 +1,13 @@
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
 import { promises as fs } from "fs";
 import path from "path";
-import { PrismaClient } from "@prisma/client";
-import Cart from "../../components/Cart";
+import { PrismaClient, Prisma } from "@prisma/client";
+// import Cart from "../../components/Cart";
+import Button from "../../components/Button";
+import MenuBar from "../../components/MenuBar";
+import { styled, Box } from "../../stitches.config";
+import { useCartStore } from "../../lib/cart";
 
 const prisma = new PrismaClient();
 
@@ -71,16 +75,90 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   } else return { props: {} };
 };
 
+const ImageContainer = styled("div", {
+  height: "54vh",
+  position: "relative",
+  // borderBottomRightRadius: "$large",
+  // borderBottomLeftRadius: "$large",
+  // overflow: "hidden",
+  // filter: "drop-shadow(0 0 30px var(--shadows-crimson7))",
+});
+
+const Container = styled("main", {
+  padding: "$5",
+});
+
+const ProductName = styled("h1", {
+  all: "unset",
+  fontSize: "$4",
+  lineHeight: "30px",
+  color: "$mauve12",
+  fontFamily: "Work Sans, sans-serif",
+});
+
+const ProductPrice = styled("div", {
+  fontSize: "$4",
+  lineHeight: "30px",
+  color: "$mauve12",
+  fontFamily: "Work Sans, sans-serif",
+});
+
+const ProductBrand = styled("div", {
+  color: "$mauve8",
+});
+
+const ProductDescription = styled("p", {
+  color: "$mauve11",
+});
+
 const ProductPage = ({
   product,
   productImagePaths,
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
+}: {
+  product: Required<Prisma.ProductUncheckedCreateInput>;
+  productImagePaths: string[];
+}) => {
+  const { cart, addItem } = useCartStore();
+
+  const handleAddToCart = () => {
+    console.log("Adding product...");
+    addItem(product, cart);
+  };
+
   return (
-    <div>
-      <Cart />
-      <span>{product.id}</span>
-      <span>{product.name}</span>
-      <div>
+    <Box
+      css={{
+        height: "100vh",
+        background:
+          "radial-gradient(circle at top left, $crimson4, rgba(255, 255, 255, 0) 30%), radial-gradient(circle at bottom right, $crimson4, rgba(255, 255, 255, 0) 30%)",
+      }}
+    >
+      <MenuBar>
+        <ImageContainer>
+          <Image
+            src={productImagePaths[0]}
+            layout="fill"
+            objectFit="cover"
+            alt={productImagePaths[0]}
+          />
+        </ImageContainer>
+        {/* <Cart /> */}
+        <Container>
+          <Box
+            css={{
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "space-between",
+            }}
+          >
+            <ProductName>{product.name}</ProductName>
+            <ProductPrice>${product.price}</ProductPrice>
+          </Box>
+          <ProductBrand>{product.brandId}</ProductBrand>
+          <ProductDescription>{product.description}</ProductDescription>
+          <Button onClick={handleAddToCart}>Add to Cart</Button>
+        </Container>
+        {/* <div>
         {productImagePaths.map((imagePath: string) => (
           <div
             key={imagePath}
@@ -94,8 +172,9 @@ const ProductPage = ({
             />
           </div>
         ))}
-      </div>
-    </div>
+      </div> */}
+      </MenuBar>
+    </Box>
   );
 };
 

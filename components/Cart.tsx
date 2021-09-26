@@ -34,7 +34,7 @@ const Cart = () => {
       {cart.size && (
         <ul>
           {[...cart.values()].map((item) => (
-            <li key={item.id}>{JSON.stringify(item)}</li>
+            <li key={item.id}>{item.name}</li>
           ))}
         </ul>
       )}

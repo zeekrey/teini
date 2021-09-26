@@ -10,7 +10,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "@modulz/radix-icons": "^4.0.0",
     "@prisma/client": "^3.1.1",
+    "@radix-ui/colors": "^0.1.7",
+    "@stitches/react": "^1.2.1",
     "@stripe/stripe-js": "^1.18.0",
     "next": "11.1.2",
     "react": "17.0.2",
