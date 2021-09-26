@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 import { GetStaticProps } from "next";
 import { PrismaClient, Prisma } from "@prisma/client";
 import { useCartStore } from "../lib/cart";
-import Cart from "../components/Cart";
 
 const prisma = new PrismaClient();
 
@@ -38,7 +37,6 @@ const Home: NextPage<{
 
   return (
     <main>
-      <Cart />
       <ul>
         {products.map((product) => (
           <li key={product.slug}>

@@ -61,7 +61,7 @@ const MenuBar: React.FunctionComponent = ({ children }) => {
               <HomeIcon />
             </a>
           </Link>
-          <Link href="/" passHref>
+          <Link href="/cart" passHref>
             <Box as="a" css={{ position: "relative" }}>
               <CartSizeIcon>{cart.size}</CartSizeIcon>
               <ArchiveIcon />
