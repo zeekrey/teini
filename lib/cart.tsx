@@ -7,16 +7,23 @@ type CartState = {
   cart:
     | Map<
         number,
-        Required<Prisma.ProductUncheckedCreateInput & { count: number }>
+        Required<
+          Prisma.ProductUncheckedCreateInput & {
+            count: number;
+          }
+        > & { images?: string[] }
       >
     | Map<any, any>;
   removeItem: (
-    item: Required<Prisma.ProductUncheckedCreateInput>,
+    item: Required<Prisma.ProductUncheckedCreateInput> & { images?: string[] },
     cart: Map<number, Prisma.ProductUncheckedCreateInput & { count: number }>
   ) => void;
   addItem: (
-    item: Required<Prisma.ProductUncheckedCreateInput>,
-    cart: Map<number, Prisma.ProductUncheckedCreateInput & { count: number }>
+    item: Required<Prisma.ProductUncheckedCreateInput> & { images?: string[] },
+    cart: Map<
+      number,
+      Prisma.ProductUncheckedCreateInput & { count: number; images?: string[] }
+    >
   ) => void;
   clearCart: () => void;
 };

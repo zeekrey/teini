@@ -1,8 +1,10 @@
 import Link from "next/link";
+import Image from "next/image";
 import { styled, Box } from "../stitches.config";
 import { Prisma } from "@prisma/client";
 import { useCartStore } from "../lib/cart";
 import { currencyCodeToSymbol } from "../lib/stripeHelpers";
+import PlaceholderImage from "../public/placeholder.png";
 
 const Wrapper = styled("div", {
   boxShadow:
@@ -43,8 +45,19 @@ const CountButton = styled("button", {
   placeContent: "center",
 });
 
+const ImageContainer = styled("div", {
+  position: "relative",
+  height: "120px",
+  width: "120px",
+  borderRadius: "12px",
+  overflow: "hidden",
+});
+
 const ProductCardCart: React.FunctionComponent<{
-  product: Required<Prisma.ProductUncheckedCreateInput> & { count?: number };
+  product: Required<Prisma.ProductUncheckedCreateInput> & {
+    count?: number;
+    images: string[];
+  };
 }> = ({ product }) => {
   const { cart, addItem, removeItem } = useCartStore();
 
@@ -58,26 +71,43 @@ const ProductCardCart: React.FunctionComponent<{
   return (
     <Wrapper>
       <Link href={`/products/${product.slug}`} passHref>
-        <a>
-          <ProductName>{product.name}</ProductName>
-          <ProductDescription>{product.description}</ProductDescription>
-          <ProductPrice>
-            {currencyCodeToSymbol(product.currency)} {product.price / 100}
-          </ProductPrice>
-        </a>
+        <Box as="a" css={{ display: "flex", flex: 1 }}>
+          <ImageContainer>
+            {product.images ? (
+              <Image
+                src={product.images[0]}
+                layout="fill"
+                objectFit="cover"
+                alt={product.images[0]}
+              />
+            ) : (
+              <Image
+                src={PlaceholderImage}
+                layout="fill"
+                objectFit="cover"
+                alt="placeholder"
+              />
+            )}
+          </ImageContainer>
+          <div>
+            <ProductName>{product.name}</ProductName>
+            <ProductPrice>
+              {currencyCodeToSymbol(product.currency)} {product.price / 100}
+            </ProductPrice>
+          </div>
+        </Box>
       </Link>
       <Box
         css={{
-          flex: 1,
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-evenly",
           alignItems: "center",
         }}
       >
-        <CountButton onClick={handleRemoveItem}>-</CountButton>
-        <Box css={{ textAlign: "center" }}>{product.count}</Box>
         <CountButton onClick={handleAddItem}>+</CountButton>
+        <Box css={{ textAlign: "center" }}>{product.count}</Box>
+        <CountButton onClick={handleRemoveItem}>-</CountButton>
       </Box>
     </Wrapper>
   );

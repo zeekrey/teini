@@ -137,7 +137,7 @@ const ProductPage = ({
   const { cart, addItem } = useCartStore();
 
   const handleAddToCart = () => {
-    addItem(product, cart);
+    addItem({ ...product, images: [...productImagePaths] }, cart);
   };
 
   return (
