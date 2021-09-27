@@ -15,7 +15,7 @@
 - [] Add npm script to add db
 - [] Add wishlist feature
 - [] Add share feature
-- [] Seo 
+- [] Seo
 
 Dummy Product photos
 Photo by <a href="https://unsplash.com/@boxedwater?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Boxed Water Is Better</a> on <a href="https://unsplash.com/@boxedwater?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
@@ -32,4 +32,5 @@ Photo by <a href="https://unsplash.com/@boxedwater?utm_source=unsplash&utm_mediu
 
 To add new db changes during prototyping
 npx prisma db push
+npx prisma db push --force-reset (to reset the db)
 npx prisma db seed
