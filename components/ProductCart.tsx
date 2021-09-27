@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { styled, Box } from "../stitches.config";
 import { Prisma } from "@prisma/client";
 import { useCartStore } from "../lib/cart";
@@ -42,7 +43,7 @@ const CountButton = styled("button", {
 });
 
 const ProductCart: React.FunctionComponent<{
-  product: Required<Prisma.ProductUncheckedCreateInput> & { count: number };
+  product: Required<Prisma.ProductUncheckedCreateInput> & { count?: number };
 }> = ({ product }) => {
   const { cart, addItem, removeItem } = useCartStore();
 
@@ -55,11 +56,13 @@ const ProductCart: React.FunctionComponent<{
   };
   return (
     <Wrapper>
-      <div>
-        <ProductName>{product.name}</ProductName>
-        <ProductDescription>{product.description}</ProductDescription>
-        <ProductPrice>{product.price}</ProductPrice>
-      </div>
+      <Link href={`/products/${product.slug}`} passHref>
+        <a>
+          <ProductName>{product.name}</ProductName>
+          <ProductDescription>{product.description}</ProductDescription>
+          <ProductPrice>{product.price}</ProductPrice>
+        </a>
+      </Link>
       <Box
         css={{
           flex: 1,

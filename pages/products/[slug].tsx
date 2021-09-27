@@ -3,9 +3,9 @@ import Image from "next/image";
 import { promises as fs } from "fs";
 import path from "path";
 import { PrismaClient, Prisma } from "@prisma/client";
-// import Cart from "../../components/Cart";
 import Button from "../../components/Button";
 import MenuBar from "../../components/MenuBar";
+import Layout from "../../components/Layout";
 import { styled, Box } from "../../stitches.config";
 import { useCartStore } from "../../lib/cart";
 
@@ -126,39 +126,32 @@ const ProductPage = ({
   };
 
   return (
-    <Box
-      css={{
-        height: "100vh",
-        background:
-          "radial-gradient(circle at top left, $crimson4, rgba(255, 255, 255, 0) 30%), radial-gradient(circle at bottom right, $crimson4, rgba(255, 255, 255, 0) 30%)",
-      }}
-    >
-      <MenuBar>
-        <ImageContainer>
-          <Image
-            src={productImagePaths[0]}
-            layout="fill"
-            objectFit="cover"
-            alt={productImagePaths[0]}
-          />
-        </ImageContainer>
-        {/* <Cart /> */}
-        <Container>
-          <Box
-            css={{
-              display: "flex",
-              alignItems: "flex-start",
-              justifyContent: "space-between",
-            }}
-          >
-            <ProductName>{product.name}</ProductName>
-            <ProductPrice>${product.price}</ProductPrice>
-          </Box>
-          <ProductBrand>{product.brandId}</ProductBrand>
-          <ProductDescription>{product.description}</ProductDescription>
-          <Button onClick={handleAddToCart}>Add to Cart</Button>
-        </Container>
-        {/* <div>
+    <MenuBar>
+      <ImageContainer>
+        <Image
+          src={productImagePaths[0]}
+          layout="fill"
+          objectFit="cover"
+          alt={productImagePaths[0]}
+        />
+      </ImageContainer>
+      {/* <Cart /> */}
+      <Container>
+        <Box
+          css={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+          }}
+        >
+          <ProductName>{product.name}</ProductName>
+          <ProductPrice>${product.price}</ProductPrice>
+        </Box>
+        <ProductBrand>{product.brandId}</ProductBrand>
+        <ProductDescription>{product.description}</ProductDescription>
+        <Button onClick={handleAddToCart}>Add to Cart</Button>
+      </Container>
+      {/* <div>
         {productImagePaths.map((imagePath: string) => (
           <div
             key={imagePath}
@@ -173,9 +166,11 @@ const ProductPage = ({
           </div>
         ))}
       </div> */}
-      </MenuBar>
-    </Box>
+    </MenuBar>
   );
 };
+
+// @ts-ignore
+ProductPage.layout = Layout;
 
 export default ProductPage;

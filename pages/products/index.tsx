@@ -1,12 +1,12 @@
 import { GetStaticProps } from "next";
 import Link from "next/link";
 import { PrismaClient, Prisma } from "@prisma/client";
-import { useCartStore } from "../lib/cart";
-import Layout from "../components/Layout";
-import { styled, Box } from "../stitches.config";
-import ProductCart from "../components/ProductCart";
-import MenuBar from "../components/MenuBar";
-import Button from "../components/Button";
+import { useCartStore } from "../../lib/cart";
+import Layout from "../../components/Layout";
+import { styled, Box } from "../../stitches.config";
+import ProductCart from "../../components/ProductCart";
+import MenuBar from "../../components/MenuBar";
+import Button from "../../components/Button";
 import { ArrowRightIcon } from "@modulz/radix-icons";
 
 const prisma = new PrismaClient();
@@ -49,7 +49,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   };
 };
 
-const Home: React.FunctionComponent<{
+const Products: React.FunctionComponent<{
   products: Required<Prisma.ProductUncheckedCreateInput>[];
 }> = ({ products }) => {
   const { cart, addItem, removeItem, clearCart } = useCartStore();
@@ -57,35 +57,17 @@ const Home: React.FunctionComponent<{
   return (
     <MenuBar>
       <Box as="main" css={{ padding: "$2" }}>
-        <Headline>Teini is the most smallest shop ever</Headline>
-        <Subheadline>
-          It gets you starting. Without budget. Without the ecommerce complexity
-          you normally see.
-        </Subheadline>
         <div>
           {products.map((product) => (
             <ProductCart key={product.id} product={product} />
           ))}
         </div>
-        <Link href="/products" passHref>
-          <Button
-            as="a"
-            css={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <span>See all products</span>
-            <ArrowRightIcon />
-          </Button>
-        </Link>
       </Box>
     </MenuBar>
   );
 };
 
 // @ts-ignore
-Home.layout = Layout;
+Products.layout = Layout;
 
-export default Home;
+export default Products;
