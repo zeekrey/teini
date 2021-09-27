@@ -27,6 +27,7 @@ async function main() {
       name: "The first product",
       description: "This is the first product description",
       price: 299,
+      currency: 'usd',
       availability: "inStock",
       shippingCodeId: 1,
       brandId: 1,

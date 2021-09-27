@@ -2,6 +2,7 @@ import Link from "next/link";
 import { styled, Box } from "../stitches.config";
 import { Prisma } from "@prisma/client";
 import { useCartStore } from "../lib/cart";
+import { currencyCodeToSymbol } from "../lib/stripeHelpers";
 
 const Wrapper = styled("div", {
   boxShadow:
@@ -60,7 +61,9 @@ const ProductCart: React.FunctionComponent<{
         <a>
           <ProductName>{product.name}</ProductName>
           <ProductDescription>{product.description}</ProductDescription>
-          <ProductPrice>{product.price}</ProductPrice>
+          <ProductPrice>
+            {currencyCodeToSymbol(product.currency)} {product.price / 100}
+          </ProductPrice>
         </a>
       </Link>
       <Box

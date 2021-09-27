@@ -8,6 +8,7 @@ import MenuBar from "../../components/MenuBar";
 import Layout from "../../components/Layout";
 import { styled, Box } from "../../stitches.config";
 import { useCartStore } from "../../lib/cart";
+import { currencyCodeToSymbol } from "../../lib/stripeHelpers";
 
 const prisma = new PrismaClient();
 
@@ -145,7 +146,9 @@ const ProductPage = ({
           }}
         >
           <ProductName>{product.name}</ProductName>
-          <ProductPrice>${product.price}</ProductPrice>
+          <ProductPrice>
+            {currencyCodeToSymbol(product.currency)} {product.price / 100}
+          </ProductPrice>
         </Box>
         <ProductBrand>{product.brandId}</ProductBrand>
         <ProductDescription>{product.description}</ProductDescription>

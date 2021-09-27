@@ -1,10 +1,11 @@
-import { Prisma } from "@prisma/client";
 import Button from "../components/Button";
 import MenuBar from "../components/MenuBar";
 import { styled, Box } from "../stitches.config";
 import { useCartStore } from "../lib/cart";
+import { currencyCodeToSymbol } from "../lib/stripeHelpers";
 import ProductCart from "../components/ProductCart";
 import { getStripe, cartItemToLineItem } from "../lib/stripeHelpers";
+import Layout from "../components/Layout";
 
 const ProductList = styled("div", {
   display: "grid",
@@ -12,12 +13,12 @@ const ProductList = styled("div", {
 });
 
 const CartPage = () => {
-  const { cart, addItem, removeItem } = useCartStore();
+  const { cart } = useCartStore();
 
   const handleCheckout = async () => {
     const stripe = await getStripe();
     const lineItems = [...cart.values()].map((item) =>
-      cartItemToLineItem(item)
+      cartItemToLineItem({ cartItem: item, images: [""] })
     );
 
     const response = await fetch("/api/checkout_sessions", {
@@ -37,33 +38,29 @@ const CartPage = () => {
   };
 
   return (
-    <Box
-      css={{
-        height: "100vh",
-        background:
-          "radial-gradient(circle at top left, $crimson4, rgba(255, 255, 255, 0) 30%), radial-gradient(circle at bottom right, $crimson4, rgba(255, 255, 255, 0) 30%)",
-      }}
-    >
-      <MenuBar>
-        <Box css={{ padding: "$2" }}>
-          <ProductList>
-            {cart.size &&
-              [...cart.values()].map((item) => (
-                <ProductCart key={item.id} product={item} />
-              ))}
-          </ProductList>
-          <div>
-            Total:{" "}
-            {[...cart.values()].reduce(
-              (total, item) => total + item.price * item.count,
-              0
-            )}
-          </div>
-          <Button onClick={handleCheckout}>Buy now</Button>
-        </Box>
-      </MenuBar>
-    </Box>
+    <MenuBar>
+      <Box css={{ padding: "$2" }}>
+        <ProductList>
+          {cart.size &&
+            [...cart.values()].map((item) => (
+              <ProductCart key={item.id} product={item} />
+            ))}
+        </ProductList>
+        <div>
+          Total: {/* Get the currency code of the first item for now. */}
+          {currencyCodeToSymbol(cart.values().next().value.currency)}
+          {[...cart.values()].reduce(
+            (total, item) => total + item.price * item.count,
+            0
+          ) / 100}
+        </div>
+        <Button onClick={handleCheckout}>Buy now</Button>
+      </Box>
+    </MenuBar>
   );
 };
+
+// @ts-ignore
+CartPage.layout = Layout;
 
 export default CartPage;

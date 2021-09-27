@@ -14,7 +14,8 @@ model Product {
   slug           String
   name           String
   description    String
-  price          Float
+  price          Int
+  currency       String
   availability   String
   shippingCode   ShippingCode @relation(fields: [shippingCodeId], references: [id])
   shippingCodeId Int
