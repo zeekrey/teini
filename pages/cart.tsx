@@ -3,7 +3,7 @@ import MenuBar from "../components/MenuBar";
 import { styled, Box } from "../stitches.config";
 import { useCartStore } from "../lib/cart";
 import { currencyCodeToSymbol } from "../lib/stripeHelpers";
-import ProductCart from "../components/ProductCart";
+import ProductCardCart from "../components/ProductCardCart";
 import { getStripe, cartItemToLineItem } from "../lib/stripeHelpers";
 import Layout from "../components/Layout";
 
@@ -40,21 +40,24 @@ const CartPage = () => {
   return (
     <MenuBar>
       <Box css={{ padding: "$2" }}>
-        <ProductList>
-          {cart.size &&
-            [...cart.values()].map((item) => (
-              <ProductCart key={item.id} product={item} />
-            ))}
-        </ProductList>
-        <div>
-          Total: {/* Get the currency code of the first item for now. */}
-          {currencyCodeToSymbol(cart.values().next().value.currency)}
-          {[...cart.values()].reduce(
-            (total, item) => total + item.price * item.count,
-            0
-          ) / 100}
-        </div>
-        <Button onClick={handleCheckout}>Buy now</Button>
+        {cart.size && (
+          <>
+            <ProductList>
+              {[...cart.values()].map((item) => (
+                <ProductCardCart key={item.id} product={item} />
+              ))}
+            </ProductList>
+            <div>
+              Total: {/* Get the currency code of the first item for now. */}
+              {currencyCodeToSymbol(cart.values().next().value.currency)}
+              {[...cart.values()].reduce(
+                (total, item) => total + item.price * item.count,
+                0
+              ) / 100}
+            </div>
+            <Button onClick={handleCheckout}>Buy now</Button>
+          </>
+        )}
       </Box>
     </MenuBar>
   );

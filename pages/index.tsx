@@ -4,9 +4,11 @@ import { PrismaClient, Prisma } from "@prisma/client";
 import { useCartStore } from "../lib/cart";
 import Layout from "../components/Layout";
 import { styled, Box } from "../stitches.config";
-import ProductCart from "../components/ProductCart";
+import ProductCard from "../components/ProductCard";
 import MenuBar from "../components/MenuBar";
 import Button from "../components/Button";
+import { promises as fs } from "fs";
+import path from "path";
 import { ArrowRightIcon } from "@modulz/radix-icons";
 
 const prisma = new PrismaClient();
@@ -37,23 +39,52 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     },
   });
 
-  return {
-    props: {
-      products: allVisibleProducts.map((product) => ({
-        ...product,
-        // Date objects needs to be converted to strings because the props object will be serialized as JSON
-        createdAt: product.createdAt.toString(),
-        updatedAt: product.updatedAt.toString(),
-      })),
-    },
-  };
+  /**
+   * Get all images forthose products that are place under /public/products/[id]
+   */
+
+  if (allVisibleProducts) {
+    let allImagePaths = [];
+
+    for (const product of allVisibleProducts) {
+      const imagesDirectory = path.join(
+        process.cwd(),
+        `public/products/${product.id}`
+      );
+
+      try {
+        const productImagePaths = await fs.readdir(imagesDirectory);
+        allImagePaths.push({
+          id: product.id,
+          paths: productImagePaths.map(
+            (path) => `/products/${product.id}/${path}`
+          ),
+        });
+      } catch (error) {
+        console.warn(
+          `Image ${product.name} has no images under /public/product/[id]!`
+        );
+      }
+    }
+
+    return {
+      props: {
+        products: allVisibleProducts.map((product) => ({
+          ...product,
+          // Date objects needs to be converted to strings because the props object will be serialized as JSON
+          createdAt: product.createdAt.toString(),
+          updatedAt: product.updatedAt.toString(),
+        })),
+        images: await Promise.all(allImagePaths),
+      },
+    };
+  } else return { props: {} };
 };
 
 const Home: React.FunctionComponent<{
   products: Required<Prisma.ProductUncheckedCreateInput>[];
-}> = ({ products }) => {
-  const { cart, addItem, removeItem, clearCart } = useCartStore();
-
+  images: { id: number; paths: string[] }[];
+}> = ({ products, images }) => {
   return (
     <MenuBar>
       <Box as="main" css={{ padding: "$2" }}>
@@ -64,7 +95,11 @@ const Home: React.FunctionComponent<{
         </Subheadline>
         <div>
           {products.map((product) => (
-            <ProductCart key={product.id} product={product} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              images={images.filter((image) => image.id === product.id)[0]}
+            />
           ))}
         </div>
         <Link href="/products" passHref>

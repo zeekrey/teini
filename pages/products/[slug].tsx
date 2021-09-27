@@ -9,6 +9,7 @@ import Layout from "../../components/Layout";
 import { styled, Box } from "../../stitches.config";
 import { useCartStore } from "../../lib/cart";
 import { currencyCodeToSymbol } from "../../lib/stripeHelpers";
+import PlaceholderImage from "../../public/placeholder.png";
 
 const prisma = new PrismaClient();
 
@@ -58,31 +59,45 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       process.cwd(),
       `public/products/${product.id}`
     );
-    const productImagePaths = await fs.readdir(imagesDirectory);
 
-    return {
-      props: {
-        product: {
-          ...product,
-          // Date objects needs to be converted to strings because the props object will be serialized as JSON
-          createdAt: product?.createdAt.toString(),
-          updatedAt: product?.updatedAt.toString(),
+    try {
+      const productImagePaths = await fs.readdir(imagesDirectory);
+
+      return {
+        props: {
+          product: {
+            ...product,
+            // Date objects needs to be converted to strings because the props object will be serialized as JSON
+            createdAt: product?.createdAt.toString(),
+            updatedAt: product?.updatedAt.toString(),
+          },
+          productImagePaths: productImagePaths.map(
+            (path) => `/products/${product.id}/${path}`
+          ),
         },
-        productImagePaths: productImagePaths.map(
-          (path) => `/products/${product.id}/${path}`
-        ),
-      },
-    };
+      };
+    } catch (error) {
+      console.warn(
+        `Image ${product.name} has no images under /public/product/[id]!`
+      );
+      return {
+        props: {
+          product: {
+            ...product,
+            // Date objects needs to be converted to strings because the props object will be serialized as JSON
+            createdAt: product?.createdAt.toString(),
+            updatedAt: product?.updatedAt.toString(),
+          },
+          productImagePaths: [],
+        },
+      };
+    }
   } else return { props: {} };
 };
 
 const ImageContainer = styled("div", {
   height: "54vh",
   position: "relative",
-  // borderBottomRightRadius: "$large",
-  // borderBottomLeftRadius: "$large",
-  // overflow: "hidden",
-  // filter: "drop-shadow(0 0 30px var(--shadows-crimson7))",
 });
 
 const Container = styled("main", {
@@ -122,21 +137,28 @@ const ProductPage = ({
   const { cart, addItem } = useCartStore();
 
   const handleAddToCart = () => {
-    console.log("Adding product...");
     addItem(product, cart);
   };
 
   return (
     <MenuBar>
       <ImageContainer>
-        <Image
-          src={productImagePaths[0]}
-          layout="fill"
-          objectFit="cover"
-          alt={productImagePaths[0]}
-        />
+        {productImagePaths.length ? (
+          <Image
+            src={productImagePaths[0]}
+            layout="fill"
+            objectFit="cover"
+            alt={productImagePaths[0]}
+          />
+        ) : (
+          <Image
+            src={PlaceholderImage}
+            layout="fill"
+            objectFit="cover"
+            alt="placeholder"
+          />
+        )}
       </ImageContainer>
-      {/* <Cart /> */}
       <Container>
         <Box
           css={{
@@ -154,21 +176,6 @@ const ProductPage = ({
         <ProductDescription>{product.description}</ProductDescription>
         <Button onClick={handleAddToCart}>Add to Cart</Button>
       </Container>
-      {/* <div>
-        {productImagePaths.map((imagePath: string) => (
-          <div
-            key={imagePath}
-            style={{ width: "400px", height: "400px", position: "relative" }}
-          >
-            <Image
-              src={imagePath}
-              layout="fill"
-              objectFit="cover"
-              alt={imagePath}
-            />
-          </div>
-        ))}
-      </div> */}
     </MenuBar>
   );
 };

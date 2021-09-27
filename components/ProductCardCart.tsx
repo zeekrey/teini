@@ -43,7 +43,7 @@ const CountButton = styled("button", {
   placeContent: "center",
 });
 
-const ProductCart: React.FunctionComponent<{
+const ProductCardCart: React.FunctionComponent<{
   product: Required<Prisma.ProductUncheckedCreateInput> & { count?: number };
 }> = ({ product }) => {
   const { cart, addItem, removeItem } = useCartStore();
@@ -83,4 +83,4 @@ const ProductCart: React.FunctionComponent<{
   );
 };
 
-export default ProductCart;
+export default ProductCardCart;
