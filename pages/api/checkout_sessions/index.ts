@@ -18,7 +18,11 @@ export default async function handler(
         line_items,
         payment_method_types: ["card"],
         mode: "payment",
-        success_url: `${req.headers.origin}/?success=true&session_id={CHECKOUT_SESSION_ID}`,
+        billing_address_collection: "required",
+        shipping_address_collection: {
+          allowed_countries: ["DE", "US"],
+        },
+        success_url: `${req.headers.origin}/confirmation/?success=true&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${req.headers.origin}/?canceled=true`,
       });
 
