@@ -1,21 +1,7 @@
 # Teini
 
-## ToDos:
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzeekrey%2Fteini&env=STRIPE_SECRET_KEY,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY&envDescription=Stripe&envLink=https%3A%2F%2Fteini.co%2F&redirect-url=https%3A%2F%2Fteini.co%2F&demo-title=Teini%20Demo&demo-description=This%20is%20the%20demo%20description&demo-url=https%3A%2F%2Fteini.co%2F)
 
-- [x] Setup product database
-- [x] Add tests for product database
-- [x] View product
-- [x] Cart
-- [] Add tests for Cart
-- [x] Checkout
-- [x] Handle product images
-- [] Handle currancy code
-- [] Change price to integer in cent
-- [] Style
-- [] Add npm script to add db
-- [] Add wishlist feature
-- [] Add share feature
-- [] Seo
 
 Dummy Product photos
 Photo by <a href="https://unsplash.com/@boxedwater?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Boxed Water Is Better</a> on <a href="https://unsplash.com/@boxedwater?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>

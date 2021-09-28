@@ -1,7 +1,13 @@
 import Link from "next/link";
 import { styled, Box } from "../stitches.config";
 import { useCartStore } from "../lib/cart";
-import { HomeIcon, ArchiveIcon, GearIcon, SunIcon } from "@modulz/radix-icons";
+import {
+  HomeIcon,
+  ArchiveIcon,
+  GearIcon,
+  SunIcon,
+  MoonIcon,
+} from "@modulz/radix-icons";
 import * as Popover from "@radix-ui/react-popover";
 import * as Switch from "@radix-ui/react-switch";
 import { useTheme } from "next-themes";
@@ -68,13 +74,12 @@ const StyledSwitch = styled(Switch.Root, {
   all: "unset",
   width: 42,
   height: 25,
-  backgroundColor: "$crimson12",
+  backgroundColor: "$crimson8",
   borderRadius: "9999px",
   position: "relative",
-  boxShadow: `0 2px 10px $crimson10`,
   WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
-  "&:focus": { boxShadow: `0 0 0 2px black` },
-  '&[data-state="checked"]': { backgroundColor: "black" },
+  "&:focus": { boxShadow: `0 0 0 2px $crimson9` },
+  '&[data-state="checked"]': { backgroundColor: "$crimson9" },
 });
 
 const StyledThumb = styled(Switch.Thumb, {
@@ -82,9 +87,9 @@ const StyledThumb = styled(Switch.Thumb, {
   placeContent: "center",
   width: 21,
   height: 21,
-  backgroundColor: "white",
+  backgroundColor: "$crimson4",
+  color: "$crimson11",
   borderRadius: "9999px",
-  boxShadow: `0 2px 2px $crimson6`,
   transition: "transform 100ms",
   transform: "translateX(2px)",
   willChange: "transform",
@@ -137,7 +142,7 @@ const MenuBar: React.FunctionComponent = () => {
                 onClick={() => setTheme(theme === "light" ? "dark" : "light")}
               >
                 <StyledThumb>
-                  <SunIcon />
+                  {theme === "light" ? <SunIcon /> : <MoonIcon />}
                 </StyledThumb>
               </StyledSwitch>
             </Flex>
