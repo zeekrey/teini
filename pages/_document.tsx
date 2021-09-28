@@ -1,10 +1,9 @@
 // eslint-disable-next-line @next/next/no-document-import-in-page
 import Document, { Html, Head, Main, NextScript } from "next/document";
-import { getCssText, globalStyles } from "../stitches.config";
+import { getCssText } from "../stitches.config";
 
 class MyDocument extends Document {
   render() {
-    globalStyles();
     return (
       <Html>
         <Head>

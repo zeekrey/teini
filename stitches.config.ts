@@ -60,6 +60,13 @@ export const {
   },
 });
 
+export const darkTheme = createTheme({
+  colors: {
+    ...crimsonDark,
+    ...mauveDark,
+  },
+});
+
 export const globalStyles = globalCss({
   html: { margin: 0, padding: 0, minHeight: "100vh" },
   body: {

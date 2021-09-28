@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { styled, Box } from "../stitches.config";
 import { useCartStore } from "../lib/cart";
-import { HomeIcon, ArchiveIcon, GearIcon } from "@modulz/radix-icons";
+import { HomeIcon, ArchiveIcon, GearIcon, SunIcon } from "@modulz/radix-icons";
+import * as Popover from "@radix-ui/react-popover";
+import * as Switch from "@radix-ui/react-switch";
+import { useTheme } from "next-themes";
 
 const Wrapper = styled("div", {
   paddingLeft: "$4",
@@ -48,29 +51,101 @@ const Item = styled("div", {
   padding: "$4",
 });
 
+const StyledContent = styled(Popover.Content, {
+  borderRadius: 1,
+  padding: "20px",
+  fontSize: 14,
+  backgroundColor: "$mauve1",
+  border: "1px solid $mauve4",
+  color: "black",
+});
+
+const StyledTrigger = styled(Popover.Trigger, {
+  all: "unset",
+});
+
+const StyledSwitch = styled(Switch.Root, {
+  all: "unset",
+  width: 42,
+  height: 25,
+  backgroundColor: "$crimson12",
+  borderRadius: "9999px",
+  position: "relative",
+  boxShadow: `0 2px 10px $crimson10`,
+  WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
+  "&:focus": { boxShadow: `0 0 0 2px black` },
+  '&[data-state="checked"]': { backgroundColor: "black" },
+});
+
+const StyledThumb = styled(Switch.Thumb, {
+  display: "grid",
+  placeContent: "center",
+  width: 21,
+  height: 21,
+  backgroundColor: "white",
+  borderRadius: "9999px",
+  boxShadow: `0 2px 2px $crimson6`,
+  transition: "transform 100ms",
+  transform: "translateX(2px)",
+  willChange: "transform",
+  '&[data-state="checked"]': { transform: "translateX(19px)" },
+});
+
+const Flex = styled("div", { display: "flex" });
+const Label = styled("label", {
+  color: "$crimson12",
+  fontSize: 15,
+  lineHeight: 1,
+  userSelect: "none",
+});
+
 const MenuBar: React.FunctionComponent = () => {
   const { cart } = useCartStore();
+  const { theme, setTheme } = useTheme();
 
   return (
     <Wrapper>
-      <MenuBarBox>
-        <Link href="/" passHref>
-          <Item as="a">
-            <HomeIcon />
-          </Item>
-        </Link>
-        <Link href="/cart" passHref>
-          <Item as="a">
-            <Box css={{ position: "relative" }}>
-              <CartSizeIcon>{cart.size}</CartSizeIcon>
-              <ArchiveIcon />
-            </Box>
-          </Item>
-        </Link>
-        <Item>
-          <GearIcon />
-        </Item>
-      </MenuBarBox>
+      <Popover.Root>
+        <Popover.Anchor>
+          <MenuBarBox>
+            <Link href="/" passHref>
+              <Item as="a">
+                <HomeIcon />
+              </Item>
+            </Link>
+            <Link href="/cart" passHref>
+              <Item as="a">
+                <Box css={{ position: "relative" }}>
+                  <CartSizeIcon>{cart.size}</CartSizeIcon>
+                  <ArchiveIcon />
+                </Box>
+              </Item>
+            </Link>
+            <Item>
+              <StyledTrigger>
+                <GearIcon />
+              </StyledTrigger>
+            </Item>
+          </MenuBarBox>
+          <StyledContent side="top">
+            <Flex css={{ alignItems: "center" }}>
+              <Label htmlFor="s1" css={{ paddingRight: 15 }}>
+                Theme
+              </Label>
+              <StyledSwitch
+                id="s1"
+                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+              >
+                <StyledThumb>
+                  <SunIcon />
+                </StyledThumb>
+              </StyledSwitch>
+            </Flex>
+            {/* <Popover.Close /> */}
+            {/* <Popover.Arrow /> */}
+          </StyledContent>
+        </Popover.Anchor>
+      </Popover.Root>
     </Wrapper>
   );
 };
