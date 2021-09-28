@@ -8,21 +8,9 @@ import Layout from "../../components/Layout";
 import { styled, Box } from "../../stitches.config";
 import ProductCard from "../../components/ProductCard";
 import MenuBar from "../../components/MenuBar";
+import PageHeadline from "../../components/PageHeadline";
 
 const prisma = new PrismaClient();
-
-const Headline = styled("h1", {
-  fontFamily: "Work Sans, sans serif",
-  fontSize: "32px",
-  color: "$crimson12",
-});
-
-const Subheadline = styled("h1", {
-  fontFamily: "Roboto, sans serif",
-  fontSize: "18px",
-  fontWeight: "normal",
-  color: "$mauve9",
-});
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   /**
@@ -80,10 +68,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
 
 const Grid = styled("main", {
-  padding: "$2",
   display: "grid",
-  gridTemplateColumns: "repeat(2, 1fr)",
+  // gridTemplateColumns: "repeat(2, 1fr)",
   gap: "$2",
+  paddingBottom: "$4",
 });
 
 const Products: React.FunctionComponent<{
@@ -94,7 +82,8 @@ const Products: React.FunctionComponent<{
   // const { cart, addItem, removeItem, clearCart } = useCartStore();
 
   return (
-    <MenuBar>
+    <>
+      <PageHeadline>All Products</PageHeadline>
       <Grid>
         {products.map((product) => (
           <ProductCard
@@ -104,7 +93,7 @@ const Products: React.FunctionComponent<{
           />
         ))}
       </Grid>
-    </MenuBar>
+    </>
   );
 };
 

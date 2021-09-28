@@ -9,35 +9,37 @@ import PlaceholderImage from "../public/placeholder.png";
 const Wrapper = styled("div", {
   boxShadow:
     "0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 0px 1px rgba(0, 0, 0, 0.04)",
-  borderRadius: "20px",
-  padding: "$4",
+  borderRadius: "1px",
   display: "flex",
   background: "$crimson1",
 });
 
-const ProductName = styled("h1", {
+const ProductName = styled("strong", {
   all: "unset",
-  fontSize: "$3",
-  lineHeight: "30px",
-  color: "$mauve12",
+  fontSize: "18px",
+  lineHeight: "18px",
+  color: "$crimson12",
   fontFamily: "Work Sans, sans-serif",
 });
 
 const ProductPrice = styled("div", {
-  fontSize: "$3",
-  lineHeight: "30px",
-  color: "$mauve12",
+  fontSize: "20px",
+  lineHeight: "20px",
+  color: "$crimson12",
   fontFamily: "Work Sans, sans-serif",
 });
 
 const ProductDescription = styled("p", {
-  color: "$mauve11",
+  color: "$mauve10",
+  fontSize: "12px",
+  padding: 0,
+  margin: 0,
 });
 
 const CountButton = styled("button", {
   all: "unset",
-  width: 25,
-  height: 25,
+  width: 30,
+  height: 30,
   background: "$mauve3",
   color: "$mauve10",
   borderRadius: "$small",
@@ -47,10 +49,8 @@ const CountButton = styled("button", {
 
 const ImageContainer = styled("div", {
   position: "relative",
-  height: "120px",
-  width: "120px",
-  borderRadius: "12px",
-  overflow: "hidden",
+  height: "130px",
+  width: "110px",
 });
 
 const ProductCardCart: React.FunctionComponent<{
@@ -73,7 +73,7 @@ const ProductCardCart: React.FunctionComponent<{
       <Link href={`/products/${product.slug}`} passHref>
         <Box as="a" css={{ display: "flex", flex: 1 }}>
           <ImageContainer>
-            {product.images ? (
+            {product.images.length ? (
               <Image
                 src={product.images[0]}
                 layout="fill"
@@ -89,26 +89,38 @@ const ProductCardCart: React.FunctionComponent<{
               />
             )}
           </ImageContainer>
-          <div>
-            <ProductName>{product.name}</ProductName>
-            <ProductPrice>
-              {currencyCodeToSymbol(product.currency)} {product.price / 100}
-            </ProductPrice>
-          </div>
+          <Box css={{ padding: "$3", display: "flex", flex: 1 }}>
+            <Box
+              css={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                marginRight: "$2",
+              }}
+            >
+              <ProductName>{product.name}</ProductName>
+              <ProductDescription>
+                {product.description.substr(0, 40)}...
+              </ProductDescription>
+              <ProductPrice>
+                {currencyCodeToSymbol(product.currency)} {product.price / 100}
+              </ProductPrice>
+            </Box>
+            <Box
+              css={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <CountButton onClick={handleAddItem}>+</CountButton>
+              <Box css={{ textAlign: "center" }}>{product.count}</Box>
+              <CountButton onClick={handleRemoveItem}>-</CountButton>
+            </Box>
+          </Box>
         </Box>
       </Link>
-      <Box
-        css={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-        }}
-      >
-        <CountButton onClick={handleAddItem}>+</CountButton>
-        <Box css={{ textAlign: "center" }}>{product.count}</Box>
-        <CountButton onClick={handleRemoveItem}>-</CountButton>
-      </Box>
     </Wrapper>
   );
 };

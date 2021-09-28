@@ -5,14 +5,11 @@ import { Prisma } from "@prisma/client";
 import { useCartStore } from "../lib/cart";
 import { currencyCodeToSymbol } from "../lib/stripeHelpers";
 import { ArrowRightIcon } from "@modulz/radix-icons";
+import Button from "../components/Button";
 
 import PlaceholderImage from "../public/placeholder.png";
 
 const Wrapper = styled("div", {
-  // boxShadow:
-  //   "0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 2px rgba(0, 0, 0, 0.06), 0px 0px 1px rgba(0, 0, 0, 0.04)",
-  // borderRadius: "20px",
-  // padding: "$4",
   display: "flex",
   background: "$crimson1",
 
@@ -21,52 +18,31 @@ const Wrapper = styled("div", {
   },
 });
 
-const ProductName = styled("h1", {
-  all: "unset",
-  fontSize: "$3",
-  color: "$mauve12",
-  fontFamily: "Work Sans, sans-serif",
+const ProductName = styled("div", {
+  fontFamily: "Work Sans, sans serif",
+  color: "$crimson12",
+  fontSize: "22px",
 });
 
 const ProductPrice = styled("div", {
-  fontSize: "$2",
-  lineHeight: "30px",
-  color: "$mauve10",
-  fontFamily: "Roboto, sans-serif",
+  display: "grid",
+  placeContent: "center",
 });
 
-const SeeProductButton = styled("button", {
-  all: "unset",
-  width: 25,
-  height: 25,
-  background: "$mauve3",
-  color: "$mauve10",
-  borderRadius: "9999px",
-  display: "inline-grid",
-  placeContent: "center",
+const ProductBrand = styled("div", {
+  color: "$crimson10",
 });
 
 const ImageContainer = styled("div", {
   position: "relative",
   height: "240px",
   width: "100%",
-  borderRadius: "$large",
-  overflow: "hidden",
 });
 
 const ProductCard: React.FunctionComponent<{
   product: Required<Prisma.ProductUncheckedCreateInput>;
   images?: { id: number; paths: string[] };
 }> = ({ product, images }) => {
-  const { cart, addItem, removeItem } = useCartStore();
-
-  const handleAddItem = () => {
-    addItem(product, cart);
-  };
-
-  const handleRemoveItem = () => {
-    removeItem(product, cart);
-  };
   return (
     <Wrapper>
       <Link href={`/products/${product.slug}`} passHref>
@@ -88,34 +64,30 @@ const ProductCard: React.FunctionComponent<{
               />
             )}
           </ImageContainer>
-          <Box css={{ display: "flex", alignItems: "center" }}>
-            <Box css={{ padding: "0 $2" }}>
-              <ProductName>{product.name}</ProductName>
-              <ProductPrice>
-                {currencyCodeToSymbol(product.currency)} {product.price / 100}
-              </ProductPrice>
-            </Box>
+          <Box
+            css={{
+              display: "flex",
+              justifyContent: "space-between",
+              paddingTop: "$1",
+              paddingBottom: "$1",
+              paddingLeft: "$4",
+              marginLeft: "-$4",
+              paddingRight: "$4",
+              marginRight: "-$4",
+              borderBottom: "1px solid $mauve4",
+              borderTop: "1px solid $mauve4",
+            }}
+          >
             <div>
-              <SeeProductButton>
-                <ArrowRightIcon />
-              </SeeProductButton>
+              <ProductBrand>{product.brandId}</ProductBrand>
+              <ProductName>{product.name}</ProductName>
             </div>
+            <ProductPrice>
+              {currencyCodeToSymbol(product.currency)} {product.price / 100}
+            </ProductPrice>
           </Box>
         </a>
       </Link>
-      {/* <Box
-        css={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-        }}
-      >
-        <CountButton onClick={handleRemoveItem}>-</CountButton>
-        <Box css={{ textAlign: "center" }}>{product.count}</Box>
-        <CountButton onClick={handleAddItem}>+</CountButton>
-      </Box> */}
     </Wrapper>
   );
 };

@@ -98,25 +98,25 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 const ImageContainer = styled("div", {
   height: "54vh",
   position: "relative",
-});
-
-const Container = styled("main", {
-  padding: "$5",
+  marginLeft: "calc($4*-1)",
+  marginRight: "calc($4*-1)",
+  marginTop: "calc($4*-1)",
 });
 
 const ProductName = styled("h1", {
   all: "unset",
   fontSize: "$4",
   lineHeight: "30px",
-  color: "$mauve12",
+  color: "$crimson12",
   fontFamily: "Work Sans, sans-serif",
 });
 
 const ProductPrice = styled("div", {
   fontSize: "$4",
-  lineHeight: "30px",
   color: "$mauve12",
   fontFamily: "Work Sans, sans-serif",
+  display: "grid",
+  placeContent: "center",
 });
 
 const ProductBrand = styled("div", {
@@ -124,7 +124,8 @@ const ProductBrand = styled("div", {
 });
 
 const ProductDescription = styled("p", {
-  color: "$mauve11",
+  color: "$crimson11",
+  fontSize: "16px",
 });
 
 const ProductPage = ({
@@ -141,7 +142,7 @@ const ProductPage = ({
   };
 
   return (
-    <MenuBar>
+    <>
       <ImageContainer>
         {productImagePaths.length ? (
           <Image
@@ -159,24 +160,29 @@ const ProductPage = ({
           />
         )}
       </ImageContainer>
-      <Container>
+      <Box as="main" css={{ paddingBottom: "$4" }}>
+        <ProductBrand>{product.brandId}</ProductBrand>
+        <ProductName>{product.name}</ProductName>
+        <ProductDescription>{product.description}</ProductDescription>
         <Box
           css={{
             display: "flex",
-            alignItems: "flex-start",
             justifyContent: "space-between",
+            paddingLeft: "$4",
+            marginLeft: "-$4",
+            paddingRight: "$4",
+            marginRight: "-$4",
+            borderBottom: "1px solid $mauve4",
+            borderTop: "1px solid $mauve4",
           }}
         >
-          <ProductName>{product.name}</ProductName>
           <ProductPrice>
             {currencyCodeToSymbol(product.currency)} {product.price / 100}
           </ProductPrice>
+          <Button onClick={handleAddToCart}>Add to Cart</Button>
         </Box>
-        <ProductBrand>{product.brandId}</ProductBrand>
-        <ProductDescription>{product.description}</ProductDescription>
-        <Button onClick={handleAddToCart}>Add to Cart</Button>
-      </Container>
-    </MenuBar>
+      </Box>
+    </>
   );
 };
 

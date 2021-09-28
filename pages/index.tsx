@@ -10,6 +10,7 @@ import Button from "../components/Button";
 import { promises as fs } from "fs";
 import path from "path";
 import { ArrowRightIcon } from "@modulz/radix-icons";
+import PageHeadline from "../components/PageHeadline";
 
 const prisma = new PrismaClient();
 
@@ -81,42 +82,52 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   } else return { props: {} };
 };
 
+const Grid = styled("div", {
+  display: "grid",
+  gap: "$4",
+});
+
 const Home: React.FunctionComponent<{
   products: Required<Prisma.ProductUncheckedCreateInput>[];
   images: { id: number; paths: string[] }[];
 }> = ({ products, images }) => {
   return (
-    <MenuBar>
-      <Box as="main" css={{ padding: "$2" }}>
-        <Headline>Teini is the most smallest shop ever</Headline>
-        <Subheadline>
-          It gets you starting. Without budget. Without the ecommerce complexity
-          you normally see.
-        </Subheadline>
-        <div>
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              images={images.filter((image) => image.id === product.id)[0]}
-            />
-          ))}
-        </div>
-        <Link href="/products" passHref>
-          <Button
-            as="a"
-            css={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <span>See all products</span>
-            <ArrowRightIcon />
-          </Button>
-        </Link>
+    <>
+      <PageHeadline>Teini is the most smallest shop ever</PageHeadline>
+      <Box
+        as="p"
+        css={{
+          color: "$crimson11",
+          fontSize: "16px",
+        }}
+      >
+        It gets you starting. Without budget. Without the ecommerce complexity
+        you normally see.
       </Box>
-    </MenuBar>
+      <Grid>
+        {products.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            images={images.filter((image) => image.id === product.id)[0]}
+          />
+        ))}
+      </Grid>
+      <Link href="/products" passHref>
+        <Button
+          as="a"
+          css={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            margin: "$4 0",
+          }}
+        >
+          <span>See all products</span>
+          <ArrowRightIcon />
+        </Button>
+      </Link>
+    </>
   );
 };
 

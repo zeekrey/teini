@@ -1,13 +1,46 @@
-import { styled } from "../stitches.config";
+import { styled, Box } from "../stitches.config";
+import Footer from "./Footer";
+import MenuBar from "./MenuBar";
 
-const Wrapper = styled("div", {
+const LayoutWrapper = styled("div", {
   height: "100vh",
-  background:
-    "radial-gradient(circle at top left, $crimson3, rgba(255, 255, 255, 0) 30%), radial-gradient(circle at bottom right, $crimson3, rgba(255, 255, 255, 0) 30%)",
+  background: "$mauve1",
+});
+
+const PageWrapper = styled("div", {
+  margin: "0 $4",
+  borderLeft: "1px solid $mauve4",
+  borderRight: "1px solid $mauve4",
+});
+
+const Border = styled("div", {
+  border: "1px solid $mauve1",
 });
 
 const Layout: React.FunctionComponent = ({ children }) => {
-  return <Wrapper>{children}</Wrapper>;
+  return (
+    <LayoutWrapper>
+      <Box
+        css={{
+          height: "$4",
+        }}
+      >
+        <Box
+          css={{
+            margin: "0 $4",
+            height: "$4",
+            borderLeft: "1px solid $mauve4",
+            borderRight: "1px solid $mauve4",
+          }}
+        />
+      </Box>
+      <PageWrapper>
+        <Border>{children}</Border>
+        <MenuBar />
+        <Footer />
+      </PageWrapper>
+    </LayoutWrapper>
+  );
 };
 
 export default Layout;
