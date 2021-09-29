@@ -56,7 +56,7 @@ const ImageContainer = styled("div", {
 const ProductCardCart: React.FunctionComponent<{
   product: Required<Prisma.ProductUncheckedCreateInput> & {
     count?: number;
-    images: string[];
+    images: { path: string; blurDataURL: string }[];
   };
 }> = ({ product }) => {
   const { cart, addItem, removeItem } = useCartStore();
@@ -75,10 +75,12 @@ const ProductCardCart: React.FunctionComponent<{
           <ImageContainer>
             {product.images.length ? (
               <Image
-                src={product.images[0]}
+                src={product.images[0].path}
                 layout="fill"
                 objectFit="cover"
-                alt={product.images[0]}
+                alt={product.images[0].path}
+                placeholder="blur"
+                blurDataURL={product.images[0].blurDataURL}
               />
             ) : (
               <Image

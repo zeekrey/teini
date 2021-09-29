@@ -79,6 +79,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     try {
       const productImagePaths = await fs.readdir(imagesDirectory);
 
+      console.log(productImagePaths)
+
       /**
        * Create blurDataURLs (base64) as image placeholders
        */
@@ -125,7 +127,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             createdAt: product?.createdAt.toString(),
             updatedAt: product?.updatedAt.toString(),
           },
-          iamges: [],
+          images: [],
           meta: {
             headline,
             subheadline,
