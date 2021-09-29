@@ -10,6 +10,7 @@ import Footer from "../components/Footer";
 import { GetStaticProps, NextPage } from "next";
 import { Tmeta } from "../types";
 import MenuBar from "../components/MenuBar";
+import { NextSeo } from "next-seo";
 
 export const getStaticProps: GetStaticProps = () => {
   /**
@@ -68,6 +69,7 @@ const CartPage: NextPage<{ meta: Tmeta }> = ({ meta }) => {
 
   return (
     <>
+    <NextSeo noindex={true} />
       <MenuBar />
       <PageHeadline>Cart</PageHeadline>
       <Box

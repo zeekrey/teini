@@ -11,22 +11,22 @@ import PageHeadline from "../../components/PageHeadline";
 import { Tmeta } from "../../types";
 import Footer from "../../components/Footer";
 import MenuBar from "../../components/MenuBar";
+import { NextSeo } from "next-seo";
 
 const prisma = new PrismaClient();
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-   /**
+  /**
    * Get shop meta data from env
    */
 
-    const {
-      headline = "Teini is the most smallest shop ever",
-      subheadline = "It gets you starting. Without budget. Without the ecommerce complexity you normally see.",
-      contact = "Twitter: @zeekrey",
-      name = "Teini",
-    } = process.env;
-  
-   
+  const {
+    headline = "Teini is the most smallest shop ever",
+    subheadline = "It gets you starting. Without budget. Without the ecommerce complexity you normally see.",
+    contact = "Twitter: @zeekrey",
+    name = "Teini",
+  } = process.env;
+
   /**
    * Get all products with
    * availability !== notVisible
@@ -97,14 +97,24 @@ const Grid = styled("main", {
 const Products: React.FunctionComponent<{
   products: Required<Prisma.ProductUncheckedCreateInput>[];
   images: { id: number; paths: string[] }[];
-  meta: Tmeta
+  meta: Tmeta;
 }> = ({ products, images, meta }) => {
   console.log(images.filter((image) => image.id === products[0].id));
   // const { cart, addItem, removeItem, clearCart } = useCartStore();
 
   return (
     <>
-    <MenuBar />
+      <NextSeo
+        title={meta.headline}
+        description={meta.subheadline}
+        openGraph={{
+          type: "website",
+          title: meta.headline,
+          description: meta.subheadline,
+          site_name: meta.name,
+        }}
+      />
+      <MenuBar />
       <PageHeadline>All Products</PageHeadline>
       <Grid>
         {products.map((product) => (
@@ -115,7 +125,7 @@ const Products: React.FunctionComponent<{
           />
         ))}
       </Grid>
-      <Footer {...meta}/>
+      <Footer {...meta} />
     </>
   );
 };

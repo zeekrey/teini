@@ -5,6 +5,7 @@ import useSWR from "swr";
 import { useRouter } from "next/router";
 import { fetchGetJSON } from "../lib/fetcher";
 import { useEffect } from "react";
+import { NextSeo } from 'next-seo';
 
 const Confirmation = () => {
   const { clearCart } = useCartStore();
@@ -38,6 +39,7 @@ const Confirmation = () => {
 
   return (
     <div>
+       <NextSeo noindex={true} />
       <div>Confirmation:</div>
       {error && <div>Your payment could not be verified.</div>}
       {data && (

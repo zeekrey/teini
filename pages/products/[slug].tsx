@@ -12,6 +12,7 @@ import { currencyCodeToSymbol } from "../../lib/stripeHelpers";
 import PlaceholderImage from "../../public/placeholder.png";
 import { Tmeta } from "../../types";
 import Footer from "../../components/Footer";
+import { NextSeo } from "next-seo";
 
 const prisma = new PrismaClient();
 
@@ -166,6 +167,16 @@ const ProductPage: NextPage<{
 
   return (
     <>
+      <NextSeo
+        title={`${product.name} - ${meta.headline}`}
+        description={product.description}
+        openGraph={{
+          type: "website",
+          title: `${product.name} - ${meta.headline}`,
+          description: product.description,
+          site_name: meta.name,
+        }}
+      />
       <ImageContainer>
         {productImagePaths.length ? (
           <Image

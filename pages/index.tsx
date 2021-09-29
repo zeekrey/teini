@@ -13,6 +13,7 @@ import { ArrowRightIcon } from "@modulz/radix-icons";
 import PageHeadline from "../components/PageHeadline";
 import type { Tmeta } from "../types";
 import Footer from "../components/Footer";
+import { NextSeo } from "next-seo";
 
 const prisma = new PrismaClient();
 
@@ -113,6 +114,16 @@ const Home: React.FunctionComponent<{
 }> = ({ products, images, meta }) => {
   return (
     <>
+      <NextSeo
+        title={meta.headline}
+        description={meta.subheadline}
+        openGraph={{
+          type: "website",
+          title: meta.headline,
+          description: meta.subheadline,
+          site_name: meta.name,
+        }}
+      />
       <MenuBar />
       <PageHeadline>{meta.headline}</PageHeadline>
       <Box
