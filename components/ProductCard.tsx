@@ -39,9 +39,16 @@ const ImageContainer = styled("div", {
   width: "100%",
 });
 
+const AnimatedImage = styled(Image, {
+  transition: ".3s",
+});
+
 const ProductCard: React.FunctionComponent<{
   product: Required<Prisma.ProductUncheckedCreateInput>;
-  images?: { id: number; paths: string[] };
+  images?: {
+    id: number;
+    images: { paths: string[]; blurDataURLs: string[] };
+  };
 }> = ({ product, images }) => {
   return (
     <Wrapper>
@@ -49,11 +56,13 @@ const ProductCard: React.FunctionComponent<{
         <a>
           <ImageContainer>
             {images ? (
-              <Image
-                src={images.paths[0]}
+              <AnimatedImage
+                src={images.images.paths[0]}
                 layout="fill"
                 objectFit="cover"
-                alt={images.paths[0]}
+                alt={images.images.paths[0]}
+                placeholder="blur"
+                blurDataURL={images.images.blurDataURLs[0]}
               />
             ) : (
               <Image

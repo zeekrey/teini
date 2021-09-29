@@ -10,6 +10,7 @@ import { Tmeta } from "../../types";
 import Footer from "../../components/Footer";
 import MenuBar from "../../components/MenuBar";
 import { NextSeo } from "next-seo";
+import { getPlaiceholder } from "plaiceholder";
 
 const prisma = new PrismaClient();
 
@@ -52,11 +53,24 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
       try {
         const productImagePaths = await fs.readdir(imagesDirectory);
+
+        const blurDataURLs = await Promise.all(
+          productImagePaths.map(async (src) => {
+            const { base64 } = await getPlaiceholder(
+              `/products/${product.id}/${src}`
+            );
+            return base64;
+          })
+        ).then((values) => values);
+
         allImagePaths.push({
           id: product.id,
-          paths: productImagePaths.map(
-            (path) => `/products/${product.id}/${path}`
-          ),
+          images: {
+            paths: productImagePaths.map(
+              (path) => `/products/${product.id}/${path}`
+            ),
+            blurDataURLs: blurDataURLs,
+          },
         });
       } catch (error) {
         console.warn(
@@ -94,12 +108,9 @@ const Grid = styled("main", {
 
 const Products: React.FunctionComponent<{
   products: Required<Prisma.ProductUncheckedCreateInput>[];
-  images: { id: number; paths: string[] }[];
+  images: { id: number; images: { paths: string[]; blurDataURLs: string[] } }[];
   meta: Tmeta;
 }> = ({ products, images, meta }) => {
-  console.log(images.filter((image) => image.id === products[0].id));
-  // const { cart, addItem, removeItem, clearCart } = useCartStore();
-
   return (
     <>
       <NextSeo

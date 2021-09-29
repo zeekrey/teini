@@ -13,6 +13,8 @@ import PlaceholderImage from "../../public/placeholder.png";
 import { Tmeta } from "../../types";
 import Footer from "../../components/Footer";
 import { NextSeo } from "next-seo";
+import { getPlaiceholder } from "plaiceholder";
+import { useState } from "react";
 
 const prisma = new PrismaClient();
 
@@ -77,6 +79,19 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     try {
       const productImagePaths = await fs.readdir(imagesDirectory);
 
+      /**
+       * Create blurDataURLs (base64) as image placeholders
+       */
+
+      const blurDataURLs = await Promise.all(
+        productImagePaths.map(async (src) => {
+          const { base64 } = await getPlaiceholder(
+            `/products/${product.id}/${src}`
+          );
+          return base64;
+        })
+      ).then((values) => values);
+
       return {
         props: {
           product: {
@@ -85,9 +100,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             createdAt: product?.createdAt.toString(),
             updatedAt: product?.updatedAt.toString(),
           },
-          productImagePaths: productImagePaths.map(
-            (path) => `/products/${product.id}/${path}`
-          ),
+          images: productImagePaths.map((path, index) => ({
+            path: `/products/${product.id}/${path}`,
+            blurDataURL: blurDataURLs[index],
+          })),
           meta: {
             headline,
             subheadline,
@@ -100,6 +116,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       console.warn(
         `Image ${product.name} has no images under /public/product/[id]!`
       );
+      console.error(error);
       return {
         props: {
           product: {
@@ -108,7 +125,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             createdAt: product?.createdAt.toString(),
             updatedAt: product?.updatedAt.toString(),
           },
-          productImagePaths: [],
+          iamges: [],
           meta: {
             headline,
             subheadline,
@@ -127,6 +144,8 @@ const ImageContainer = styled("div", {
   marginLeft: "calc($4*-1)",
   marginRight: "calc($4*-1)",
   marginTop: "calc($4*-1)",
+
+  transition: "1s",
 });
 
 const ProductName = styled("h1", {
@@ -154,15 +173,20 @@ const ProductDescription = styled("p", {
   fontSize: "16px",
 });
 
+const AnimatedImage = styled(Image, {
+  transition: ".3s",
+});
+
 const ProductPage: NextPage<{
   product: Required<Prisma.ProductUncheckedCreateInput>;
-  productImagePaths: string[];
+  images: { path: string; blurDataURL: string }[];
   meta: Tmeta;
-}> = ({ product, productImagePaths, meta }) => {
+}> = ({ product, images, meta }) => {
+  const [imageIsLoaded, setImageIsLoaded] = useState(false);
   const { cart, addItem } = useCartStore();
 
   const handleAddToCart = () => {
-    addItem({ ...product, images: [...productImagePaths] }, cart);
+    addItem({ ...product, images: [...images] }, cart);
   };
 
   return (
@@ -178,12 +202,14 @@ const ProductPage: NextPage<{
         }}
       />
       <ImageContainer>
-        {productImagePaths.length ? (
-          <Image
-            src={productImagePaths[0]}
+        {images.length ? (
+          <AnimatedImage
+            src={images[0].path}
             layout="fill"
             objectFit="cover"
-            alt={productImagePaths[0]}
+            alt={images[0].path}
+            placeholder="blur"
+            blurDataURL={images[0].blurDataURL}
           />
         ) : (
           <Image
