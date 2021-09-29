@@ -6,6 +6,34 @@ import ProductCardCart from "../components/ProductCardCart";
 import { getStripe, cartItemToLineItem } from "../lib/stripeHelpers";
 import Layout from "../components/Layout";
 import PageHeadline from "../components/PageHeadline";
+import Footer from "../components/Footer";
+import { GetStaticProps, NextPage } from "next";
+import { Tmeta } from "../types";
+import MenuBar from "../components/MenuBar";
+
+export const getStaticProps: GetStaticProps = () => {
+  /**
+   * Get shop meta data from env
+   */
+
+  const {
+    headline = "Teini is the most smallest shop ever",
+    subheadline = "It gets you starting. Without budget. Without the ecommerce complexity you normally see.",
+    contact = "Twitter: @zeekrey",
+    name = "Teini",
+  } = process.env;
+
+  return {
+    props: {
+      meta: {
+        headline,
+        subheadline,
+        contact,
+        name,
+      },
+    },
+  };
+};
 
 const ProductList = styled("div", {
   display: "grid",
@@ -13,7 +41,7 @@ const ProductList = styled("div", {
   paddingBottom: "$4",
 });
 
-const CartPage = () => {
+const CartPage: NextPage<{ meta: Tmeta }> = ({ meta }) => {
   const { cart } = useCartStore();
 
   const handleCheckout = async () => {
@@ -40,6 +68,7 @@ const CartPage = () => {
 
   return (
     <>
+      <MenuBar />
       <PageHeadline>Cart</PageHeadline>
       <Box
         as="p"
@@ -104,6 +133,7 @@ const CartPage = () => {
           <div>Go and add some items to your cart!</div>
         )}
       </Box>
+      <Footer {...meta} />
     </>
   );
 };

@@ -1,18 +1,15 @@
 import { styled } from "../stitches.config";
+import type { Tmeta } from "../types";
 
 const Wrapper = styled("footer", {
   padding: "$4",
 });
 
-const Footer = () => {
+const Footer: React.FunctionComponent<Tmeta> = ({ name, contact }) => {
   return (
     <Wrapper>
-      <strong>Teini</strong>
-      <p>
-        Teini is a minimal opensource ecommerce system. It only needs to be
-        deployed and a valid Stripe account. See how it works here:{" "}
-        <a href="https://github.com/zeekrey/teini">Github</a>
-      </p>
+      <strong>{name}</strong>
+      <p>{contact}</p>
     </Wrapper>
   );
 };

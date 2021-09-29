@@ -7,12 +7,26 @@ import { useCartStore } from "../../lib/cart";
 import Layout from "../../components/Layout";
 import { styled, Box } from "../../stitches.config";
 import ProductCard from "../../components/ProductCard";
-import MenuBar from "../../components/MenuBar";
 import PageHeadline from "../../components/PageHeadline";
+import { Tmeta } from "../../types";
+import Footer from "../../components/Footer";
+import MenuBar from "../../components/MenuBar";
 
 const prisma = new PrismaClient();
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+   /**
+   * Get shop meta data from env
+   */
+
+    const {
+      headline = "Teini is the most smallest shop ever",
+      subheadline = "It gets you starting. Without budget. Without the ecommerce complexity you normally see.",
+      contact = "Twitter: @zeekrey",
+      name = "Teini",
+    } = process.env;
+  
+   
   /**
    * Get all products with
    * availability !== notVisible
@@ -62,6 +76,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           updatedAt: product.updatedAt.toString(),
         })),
         images: await Promise.all(allImagePaths),
+        meta: {
+          headline,
+          subheadline,
+          contact,
+          name,
+        },
       },
     };
   } else return { props: {} };
@@ -77,12 +97,14 @@ const Grid = styled("main", {
 const Products: React.FunctionComponent<{
   products: Required<Prisma.ProductUncheckedCreateInput>[];
   images: { id: number; paths: string[] }[];
-}> = ({ products, images }) => {
+  meta: Tmeta
+}> = ({ products, images, meta }) => {
   console.log(images.filter((image) => image.id === products[0].id));
   // const { cart, addItem, removeItem, clearCart } = useCartStore();
 
   return (
     <>
+    <MenuBar />
       <PageHeadline>All Products</PageHeadline>
       <Grid>
         {products.map((product) => (
@@ -93,6 +115,7 @@ const Products: React.FunctionComponent<{
           />
         ))}
       </Grid>
+      <Footer {...meta}/>
     </>
   );
 };

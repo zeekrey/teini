@@ -1,4 +1,4 @@
-import { GetStaticPaths, GetStaticProps } from "next";
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Image from "next/image";
 import { promises as fs } from "fs";
 import path from "path";
@@ -10,6 +10,8 @@ import { styled, Box } from "../../stitches.config";
 import { useCartStore } from "../../lib/cart";
 import { currencyCodeToSymbol } from "../../lib/stripeHelpers";
 import PlaceholderImage from "../../public/placeholder.png";
+import { Tmeta } from "../../types";
+import Footer from "../../components/Footer";
 
 const prisma = new PrismaClient();
 
@@ -38,6 +40,17 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  /**
+   * Get shop meta data from env
+   */
+
+  const {
+    headline = "Teini is the most smallest shop ever",
+    subheadline = "It gets you starting. Without budget. Without the ecommerce complexity you normally see.",
+    contact = "Twitter: @zeekrey",
+    name = "Teini",
+  } = process.env;
+
   /**
    * Get the first product with
    * params.slug === product.slug
@@ -74,6 +87,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           productImagePaths: productImagePaths.map(
             (path) => `/products/${product.id}/${path}`
           ),
+          meta: {
+            headline,
+            subheadline,
+            contact,
+            name,
+          },
         },
       };
     } catch (error) {
@@ -89,6 +108,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             updatedAt: product?.updatedAt.toString(),
           },
           productImagePaths: [],
+          meta: {
+            headline,
+            subheadline,
+            contact,
+            name,
+          },
         },
       };
     }
@@ -128,13 +153,11 @@ const ProductDescription = styled("p", {
   fontSize: "16px",
 });
 
-const ProductPage = ({
-  product,
-  productImagePaths,
-}: {
+const ProductPage: NextPage<{
   product: Required<Prisma.ProductUncheckedCreateInput>;
   productImagePaths: string[];
-}) => {
+  meta: Tmeta;
+}> = ({ product, productImagePaths, meta }) => {
   const { cart, addItem } = useCartStore();
 
   const handleAddToCart = () => {
@@ -182,6 +205,8 @@ const ProductPage = ({
           <Button onClick={handleAddToCart}>Add to Cart</Button>
         </Box>
       </Box>
+      <MenuBar />
+      <Footer {...meta} />
     </>
   );
 };

@@ -17,6 +17,8 @@ const PageHeadline: React.FunctionComponent = ({ children }) => (
       paddingRight: "$4",
       marginRight: "-$4",
       marginBottom: "$4",
+      paddingTop: "$4",
+      paddingBottom: "$4",
     }}
   >
     <Headline>{children}</Headline>

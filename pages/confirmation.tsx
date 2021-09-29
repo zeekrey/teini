@@ -47,6 +47,7 @@ const Confirmation = () => {
       )}
       {/* <div>{JSON.stringify(data)}</div>
       <div>{JSON.stringify(error)}</div> */}
+      
     </div>
   );
 };

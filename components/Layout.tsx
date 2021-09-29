@@ -1,6 +1,7 @@
 import { styled, Box } from "../stitches.config";
 import Footer from "./Footer";
 import MenuBar from "./MenuBar";
+import type { Tmeta } from "../types";
 
 const LayoutWrapper = styled("div", {
   height: "100vh",
@@ -11,10 +12,6 @@ const PageWrapper = styled("div", {
   margin: "0 $4",
   borderLeft: "1px solid $mauve4",
   borderRight: "1px solid $mauve4",
-});
-
-const Border = styled("div", {
-  border: "1px solid $mauve1",
 });
 
 const Layout: React.FunctionComponent = ({ children }) => {
@@ -34,11 +31,7 @@ const Layout: React.FunctionComponent = ({ children }) => {
           }}
         />
       </Box>
-      <PageWrapper>
-        <Border>{children}</Border>
-        <MenuBar />
-        <Footer />
-      </PageWrapper>
+      <PageWrapper>{children}</PageWrapper>
     </LayoutWrapper>
   );
 };

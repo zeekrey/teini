@@ -11,6 +11,8 @@ import { promises as fs } from "fs";
 import path from "path";
 import { ArrowRightIcon } from "@modulz/radix-icons";
 import PageHeadline from "../components/PageHeadline";
+import type { Tmeta } from "../types";
+import Footer from "../components/Footer";
 
 const prisma = new PrismaClient();
 
@@ -28,6 +30,17 @@ const Subheadline = styled("h1", {
 });
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  /**
+   * Get shop meta data from env
+   */
+
+  const {
+    headline = "Teini is the most smallest shop ever",
+    subheadline = "It gets you starting. Without budget. Without the ecommerce complexity you normally see.",
+    contact = "Twitter: @zeekrey",
+    name = "Teini",
+  } = process.env;
+
   /**
    * Get all products with
    * availability !== notVisible
@@ -77,6 +90,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           updatedAt: product.updatedAt.toString(),
         })),
         images: await Promise.all(allImagePaths),
+        meta: {
+          headline,
+          subheadline,
+          contact,
+          name,
+        },
       },
     };
   } else return { props: {} };
@@ -90,19 +109,22 @@ const Grid = styled("div", {
 const Home: React.FunctionComponent<{
   products: Required<Prisma.ProductUncheckedCreateInput>[];
   images: { id: number; paths: string[] }[];
-}> = ({ products, images }) => {
+  meta: Tmeta;
+}> = ({ products, images, meta }) => {
   return (
     <>
-      <PageHeadline>Teini is the most smallest shop ever</PageHeadline>
+      <MenuBar />
+      <PageHeadline>{meta.headline}</PageHeadline>
       <Box
         as="p"
         css={{
           color: "$crimson11",
           fontSize: "16px",
+          paddingBottom: "$4",
+          margin: 0,
         }}
       >
-        It gets you starting. Without budget. Without the ecommerce complexity
-        you normally see.
+        {meta.subheadline}
       </Box>
       <Grid>
         {products.map((product) => (
@@ -127,6 +149,7 @@ const Home: React.FunctionComponent<{
           <ArrowRightIcon />
         </Button>
       </Link>
+      <Footer {...meta} />
     </>
   );
 };
