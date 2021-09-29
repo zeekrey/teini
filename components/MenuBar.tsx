@@ -114,12 +114,12 @@ const MenuBar: React.FunctionComponent = () => {
         <Popover.Anchor>
           <MenuBarBox>
             <Link href="/" passHref>
-              <Item as="a">
+              <Item as="a" aria-label="Link to Home">
                 <HomeIcon />
               </Item>
             </Link>
             <Link href="/cart" passHref>
-              <Item as="a">
+              <Item as="a" aria-label="Link to Cart">
                 <Box css={{ position: "relative" }}>
                   <CartSizeIcon>{cart.size}</CartSizeIcon>
                   <ArchiveIcon />
@@ -140,6 +140,7 @@ const MenuBar: React.FunctionComponent = () => {
               <StyledSwitch
                 id="s1"
                 onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                aria-label="Theme switch"
               >
                 <StyledThumb>
                   {theme === "light" ? <SunIcon /> : <MoonIcon />}

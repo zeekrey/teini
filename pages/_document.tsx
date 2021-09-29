@@ -5,7 +5,7 @@ import { getCssText } from "../stitches.config";
 class MyDocument extends Document {
   render() {
     return (
-      <Html>
+      <Html lang="en">
         <Head>
           <link
             href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&family=Work+Sans:wght@600&display=swap"

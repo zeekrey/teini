@@ -1,9 +1,7 @@
 import { GetStaticProps } from "next";
-import Link from "next/link";
 import { promises as fs } from "fs";
 import path from "path";
 import { PrismaClient, Prisma } from "@prisma/client";
-import { useCartStore } from "../../lib/cart";
 import Layout from "../../components/Layout";
 import { styled, Box } from "../../stitches.config";
 import ProductCard from "../../components/ProductCard";
