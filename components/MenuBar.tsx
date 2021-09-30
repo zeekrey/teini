@@ -53,7 +53,6 @@ const Item = styled("div", {
   flex: 1,
   display: "grid",
   placeContent: "center",
-  borderRight: "1px solid $mauve4",
   padding: "$4",
   cursor: "pointer",
 

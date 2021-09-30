@@ -12,7 +12,7 @@ import PlaceholderImage from "../public/placeholder.png";
 const Wrapper = styled("div", {
   display: "flex",
   background: "$crimson1",
-  cursor: 'pointer',
+  cursor: "pointer",
 
   a: {
     flex: 1,
@@ -32,6 +32,7 @@ const ProductPrice = styled("div", {
 
 const ProductBrand = styled("div", {
   color: "$crimson10",
+  fontSize: '12px',
 });
 
 const ImageContainer = styled("div", {
@@ -45,7 +46,11 @@ const AnimatedImage = styled(Image, {
 });
 
 const ProductCard: React.FunctionComponent<{
-  product: Required<Prisma.ProductUncheckedCreateInput>;
+  product: Required<
+    Prisma.ProductUncheckedCreateInput & {
+      brand: Prisma.BrandUncheckedCreateInput;
+    }
+  >;
   images?: {
     id: number;
     images: { paths: string[]; blurDataURLs: string[] };
@@ -89,7 +94,7 @@ const ProductCard: React.FunctionComponent<{
             }}
           >
             <div>
-              <ProductBrand>{product.brandId}</ProductBrand>
+              <ProductBrand>{product.brand.name}</ProductBrand>
               <ProductName>{product.name}</ProductName>
             </div>
             <ProductPrice>

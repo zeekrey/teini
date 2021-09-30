@@ -1,7 +1,6 @@
 import { styled, Box } from "../stitches.config";
 
-export const LayoutWrapper = styled("div", {
-  height: "100vh",
+const LayoutWrapper = styled("div", {
   background: "$mauve1",
 
   "@small": {
@@ -13,7 +12,7 @@ export const LayoutWrapper = styled("div", {
   },
 
   "@large": {
-    padding: "8% 25%",
+    padding: "5% 25%",
   },
 });
 

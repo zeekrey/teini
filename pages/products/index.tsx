@@ -36,6 +36,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         not: "notVisible",
       },
     },
+    include: {
+      brand: true,
+    },
   });
 
   /**
@@ -119,7 +122,11 @@ const Grid = styled("main", {
 });
 
 const Products: React.FunctionComponent<{
-  products: Required<Prisma.ProductUncheckedCreateInput>[];
+  products: Required<
+    Prisma.ProductUncheckedCreateInput & {
+      brand: Prisma.BrandUncheckedCreateInput;
+    }
+  >[];
   images: { id: number; images: { paths: string[]; blurDataURLs: string[] } }[];
   meta: Tmeta;
 }> = ({ products, images, meta }) => {

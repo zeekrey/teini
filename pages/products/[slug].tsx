@@ -13,7 +13,6 @@ import { Tmeta } from "../../types";
 import Footer from "../../components/Footer";
 import { NextSeo } from "next-seo";
 import { getPlaiceholder } from "plaiceholder";
-import { LayoutWrapper } from "../../components/Layout";
 
 const prisma = new PrismaClient();
 
@@ -63,6 +62,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         equals: params!.slug as string,
       },
     },
+    include: {
+      brand: true,
+    },
   });
 
   /**
@@ -77,8 +79,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     try {
       const productImagePaths = await fs.readdir(imagesDirectory);
-
-      console.log(productImagePaths);
 
       /**
        * Create blurDataURLs (base64) as image placeholders
@@ -167,19 +167,43 @@ const ProductPrice = styled("div", {
 
 const ProductBrand = styled("div", {
   color: "$mauve8",
+  paddingTop: "$4",
 });
 
 const ProductDescription = styled("p", {
   color: "$crimson11",
   fontSize: "16px",
+  lineHeight: "24px",
 });
 
 const AnimatedImage = styled(Image, {
   transition: ".3s",
 });
 
+
+const LayoutWrapper = styled("div", {
+  background: "$mauve1",
+  padding: "$4",
+
+  "@small": {
+    padding: "10% 10%",
+  },
+
+  "@medium": {
+    padding: "10% 15%",
+  },
+
+  "@large": {
+    padding: "5% 25%",
+  },
+});
+
 const ProductPage: NextPage<{
-  product: Required<Prisma.ProductUncheckedCreateInput>;
+  product: Required<
+    Prisma.ProductUncheckedCreateInput & {
+      brand: Prisma.BrandUncheckedCreateInput;
+    }
+  >;
   images: { path: string; blurDataURL: string }[];
   meta: Tmeta;
 }> = ({ product, images, meta }) => {
@@ -220,8 +244,8 @@ const ProductPage: NextPage<{
           />
         )}
       </ImageContainer>
-      <Box as="main" css={{ paddingBottom: "$4" }}>
-        <ProductBrand>{product.brandId}</ProductBrand>
+      <Box as="main" css={{ paddingBottom: "$3" }}>
+        <ProductBrand>{product.brand.name}</ProductBrand>
         <ProductName>{product.name}</ProductName>
         <ProductDescription>{product.description}</ProductDescription>
         <Box
