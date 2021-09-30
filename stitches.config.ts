@@ -48,9 +48,9 @@ export const {
     },
   },
   media: {
-    bp1: "(min-width: 640px)",
-    bp2: "(min-width: 768px)",
-    bp3: "(min-width: 1024px)",
+    small: "(min-width: 640px)",
+    medium: "(min-width: 768px)",
+    large: "(min-width: 1024px)",
   },
   utils: {
     marginX: (value: string | number) => ({

@@ -1,11 +1,20 @@
 import { styled, Box } from "../stitches.config";
-import Footer from "./Footer";
-import MenuBar from "./MenuBar";
-import type { Tmeta } from "../types";
 
 const LayoutWrapper = styled("div", {
   height: "100vh",
   background: "$mauve1",
+
+  "@small": {
+    padding: "10% 10%",
+  },
+
+  "@medium": {
+    padding: "10% 15%",
+  },
+
+  "@large": {
+    padding: "8% 25%",
+  },
 });
 
 const PageWrapper = styled("div", {

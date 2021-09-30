@@ -100,10 +100,22 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
 
 const Grid = styled("main", {
-  display: "grid",
-  // gridTemplateColumns: "repeat(2, 1fr)",
-  gap: "$2",
   paddingBottom: "$4",
+  display: "grid",
+  gap: "$4",
+
+  "@small": {
+    gridTemplateColumns: "repeat(2, 1fr)",
+  },
+
+  "@medium": {
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: "$5",
+  },
+
+  "@large": {
+    gap: "40px",
+  },
 });
 
 const Products: React.FunctionComponent<{

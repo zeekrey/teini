@@ -37,9 +37,21 @@ export const getStaticProps: GetStaticProps = () => {
 };
 
 const ProductList = styled("div", {
+  paddingBottom: "$4",
   display: "grid",
   gap: "$4",
-  paddingBottom: "$4",
+
+  "@small": {
+    gridTemplateColumns: "repeat(2, 1fr)",
+  },
+
+  "@medium": {
+    gap: "$5",
+  },
+
+  "@large": {
+    gap: "40px",
+  },
 });
 
 const CartPage: NextPage<{ meta: Tmeta }> = ({ meta }) => {
@@ -69,7 +81,7 @@ const CartPage: NextPage<{ meta: Tmeta }> = ({ meta }) => {
 
   return (
     <>
-    <NextSeo noindex={true} />
+      <NextSeo noindex={true} />
       <MenuBar />
       <PageHeadline>Cart</PageHeadline>
       <Box
@@ -81,11 +93,7 @@ const CartPage: NextPage<{ meta: Tmeta }> = ({ meta }) => {
       >
         To protect you and us the checkout will be processed by Stripe.
       </Box>
-      <Box
-        css={{
-          minHeight: "65vh",
-        }}
-      >
+      <>
         {cart.size ? (
           <>
             <ProductList>
@@ -134,7 +142,7 @@ const CartPage: NextPage<{ meta: Tmeta }> = ({ meta }) => {
         ) : (
           <div>Go and add some items to your cart!</div>
         )}
-      </Box>
+      </>
       <Footer {...meta} />
     </>
   );

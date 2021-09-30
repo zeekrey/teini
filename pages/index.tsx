@@ -119,6 +119,19 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 const Grid = styled("div", {
   display: "grid",
   gap: "$4",
+
+  "@small": {
+    gridTemplateColumns: "repeat(2, 1fr)",
+  },
+
+  "@medium": {
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: "$5",
+  },
+
+  "@large": {
+    gap: "40px",
+  },
 });
 
 const Home: React.FunctionComponent<{
@@ -129,7 +142,6 @@ const Home: React.FunctionComponent<{
   }[];
   meta: Tmeta;
 }> = ({ products, images, meta }) => {
-  console.log(images);
   return (
     <>
       <NextSeo
