@@ -55,6 +55,15 @@ const Item = styled("div", {
   placeContent: "center",
   borderRight: "1px solid $mauve4",
   padding: "$4",
+  cursor: "pointer",
+
+  "&:hover": {
+    background: "$mauve2",
+  },
+
+  "&:focus, &:active": {
+    boxShadow: "0px 0px 2px 0px $mauve10",
+  },
 });
 
 const StyledContent = styled(Popover.Content, {

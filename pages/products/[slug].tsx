@@ -5,7 +5,6 @@ import path from "path";
 import { PrismaClient, Prisma } from "@prisma/client";
 import Button from "../../components/Button";
 import MenuBar from "../../components/MenuBar";
-import Layout from "../../components/Layout";
 import { styled, Box } from "../../stitches.config";
 import { useCartStore } from "../../lib/cart";
 import { currencyCodeToSymbol } from "../../lib/stripeHelpers";
@@ -14,7 +13,7 @@ import { Tmeta } from "../../types";
 import Footer from "../../components/Footer";
 import { NextSeo } from "next-seo";
 import { getPlaiceholder } from "plaiceholder";
-import { useState } from "react";
+import { LayoutWrapper } from "../../components/Layout";
 
 const prisma = new PrismaClient();
 
@@ -79,7 +78,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     try {
       const productImagePaths = await fs.readdir(imagesDirectory);
 
-      console.log(productImagePaths)
+      console.log(productImagePaths);
 
       /**
        * Create blurDataURLs (base64) as image placeholders
@@ -184,7 +183,6 @@ const ProductPage: NextPage<{
   images: { path: string; blurDataURL: string }[];
   meta: Tmeta;
 }> = ({ product, images, meta }) => {
-  const [imageIsLoaded, setImageIsLoaded] = useState(false);
   const { cart, addItem } = useCartStore();
 
   const handleAddToCart = () => {
@@ -192,7 +190,7 @@ const ProductPage: NextPage<{
   };
 
   return (
-    <>
+    <LayoutWrapper>
       <NextSeo
         title={`${product.name} - ${meta.headline}`}
         description={product.description}
@@ -246,11 +244,8 @@ const ProductPage: NextPage<{
       </Box>
       <MenuBar />
       <Footer {...meta} />
-    </>
+    </LayoutWrapper>
   );
 };
-
-// @ts-ignore
-ProductPage.layout = Layout;
 
 export default ProductPage;

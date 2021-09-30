@@ -12,6 +12,7 @@ import PlaceholderImage from "../public/placeholder.png";
 const Wrapper = styled("div", {
   display: "flex",
   background: "$crimson1",
+  cursor: 'pointer',
 
   a: {
     flex: 1,
