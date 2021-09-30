@@ -45,12 +45,23 @@ const CountButton = styled("button", {
   borderRadius: "$small",
   display: "inline-grid",
   placeContent: "center",
+  cursor: "pointer",
+
+  "&:hover": {
+    background: "$mauve4",
+  },
+
+  "&:focus": {
+    boxShadow: "0px 0px 2px 0px $mauve10",
+  },
 });
 
-const ImageContainer = styled("div", {
+const ImageContainer = styled("a", {
+  all: "unset",
   position: "relative",
   height: "130px",
   width: "110px",
+  cursor: "pointer",
 });
 
 const ProductCardCart: React.FunctionComponent<{
@@ -70,8 +81,8 @@ const ProductCardCart: React.FunctionComponent<{
   };
   return (
     <Wrapper>
-      <Link href={`/products/${product.slug}`} passHref>
-        <Box as="a" css={{ display: "flex", flex: 1 }}>
+      <Box css={{ display: "flex", flex: 1 }}>
+        <Link href={`/products/${product.slug}`} passHref>
           <ImageContainer>
             {product.images.length ? (
               <Image
@@ -91,38 +102,38 @@ const ProductCardCart: React.FunctionComponent<{
               />
             )}
           </ImageContainer>
-          <Box css={{ padding: "$3", display: "flex", flex: 1 }}>
-            <Box
-              css={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                marginRight: "$2",
-              }}
-            >
-              <ProductName>{product.name}</ProductName>
-              <ProductDescription>
-                {product.description.substr(0, 40)}...
-              </ProductDescription>
-              <ProductPrice>
-                {currencyCodeToSymbol(product.currency)} {product.price / 100}
-              </ProductPrice>
-            </Box>
-            <Box
-              css={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <CountButton onClick={handleAddItem}>+</CountButton>
-              <Box css={{ textAlign: "center" }}>{product.count}</Box>
-              <CountButton onClick={handleRemoveItem}>-</CountButton>
-            </Box>
+        </Link>
+        <Box css={{ padding: "$3", display: "flex", flex: 1 }}>
+          <Box
+            css={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              marginRight: "$2",
+            }}
+          >
+            <ProductName>{product.name}</ProductName>
+            <ProductDescription>
+              {product.description.substr(0, 40)}...
+            </ProductDescription>
+            <ProductPrice>
+              {currencyCodeToSymbol(product.currency)} {product.price / 100}
+            </ProductPrice>
+          </Box>
+          <Box
+            css={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <CountButton onClick={handleAddItem}>+</CountButton>
+            <Box css={{ textAlign: "center" }}>{product.count}</Box>
+            <CountButton onClick={handleRemoveItem}>-</CountButton>
           </Box>
         </Box>
-      </Link>
+      </Box>
     </Wrapper>
   );
 };
