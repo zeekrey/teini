@@ -130,8 +130,6 @@ const Confirmation: NextPage<{ meta: Tmeta }> = ({ meta }) => {
    * data.payment_intent
    */
 
-  // console.log(data.payment_intent);
-
   return (
     <LayoutWrapper>
       <NextSeo noindex={true} />
@@ -149,9 +147,12 @@ const Confirmation: NextPage<{ meta: Tmeta }> = ({ meta }) => {
           {error && <span>Your payment could not be verified.</span>}
           {data && <span>Awesome! That worked!</span>}
         </PageHeadline>
-        <Subheadline>
-          This is your order reference: <strong>{data.payment_intent.id}</strong>
-        </Subheadline>
+        {data && (
+          <Subheadline>
+            This is your order reference:{" "}
+            <strong>{data.payment_intent.id}</strong>
+          </Subheadline>
+        )}
       </Box>
       <MenuBar />
       <Footer {...meta} />
