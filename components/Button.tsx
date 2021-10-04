@@ -1,4 +1,4 @@
-import { styled } from "../stitches.config";
+import { styled, keyframes } from "../stitches.config";
 
 const Button = styled("button", {
   all: "unset",
@@ -19,6 +19,53 @@ const Button = styled("button", {
   "&:focus": {
     boxShadow: "0px 0px 2px 0px $crimson11",
   },
+
+  '&:disabled': {
+    background: '$crimson2',
+    cursor: 'wait'
+  }
 });
+
+export const Loading = () => {
+  const skBouncedelay = keyframes({
+    "0%, 80%, 100%": {
+      transform: "scale(0)",
+    },
+    "40%": {
+      transform: "scale(1.0)",
+    },
+  });
+  const Spinner = styled("div", {
+    textAlign: "center",
+    margin: '0 $3',
+
+    "& > div": {
+      width: " 8px",
+      height: "8px",
+      backgroundColor: "$crimson11",
+      marginLeft: '4px',
+
+      borderRadius: "100%",
+      display: "inline-block",
+      animation: `${skBouncedelay} 1.4s infinite ease-in-out both`,
+    },
+
+    "div:nth-child(1)": {
+      animationDelay: "-0.32s",
+    },
+
+    "div:nth-child(2)": {
+      animationDelay: "-0.16s",
+    },
+  });
+
+  return (
+    <Spinner>
+      {[...Array(3).keys()].map((i) => (
+        <div key={i} />
+      ))}
+    </Spinner>
+  );
+};
 
 export default Button;

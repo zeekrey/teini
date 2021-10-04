@@ -1,4 +1,4 @@
-import Button from "../components/Button";
+import Button, { Loading } from "../components/Button";
 import { styled, Box } from "../stitches.config";
 import { useCartStore } from "../lib/cart";
 import { currencyCodeToSymbol } from "../lib/stripeHelpers";
@@ -11,6 +11,7 @@ import { GetStaticProps, NextPage } from "next";
 import { Tmeta } from "../types";
 import MenuBar from "../components/MenuBar";
 import { NextSeo } from "next-seo";
+import { useState } from "react";
 
 export const getStaticProps: GetStaticProps = () => {
   /**
@@ -56,8 +57,10 @@ const ProductList = styled("div", {
 
 const CartPage: NextPage<{ meta: Tmeta }> = ({ meta }) => {
   const { cart } = useCartStore();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCheckout = async () => {
+    setIsLoading(true)
     const stripe = await getStripe();
     const lineItems = [...cart.values()].map((item) =>
       cartItemToLineItem({ cartItem: item, images: [""] })
@@ -136,7 +139,9 @@ const CartPage: NextPage<{ meta: Tmeta }> = ({ meta }) => {
                   ) / 100}
                 </Box>
               </div>
-              <Button onClick={handleCheckout}>Buy now</Button>
+              <Button disabled={isLoading} onClick={handleCheckout}>
+                {isLoading ? <Loading /> : "Buy now"}
+              </Button>
             </Box>
           </>
         ) : (

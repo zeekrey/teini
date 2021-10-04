@@ -180,7 +180,6 @@ const AnimatedImage = styled(Image, {
   transition: ".3s",
 });
 
-
 const LayoutWrapper = styled("div", {
   background: "$mauve1",
   padding: "$4",
