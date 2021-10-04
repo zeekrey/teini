@@ -58,7 +58,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     include: {
       brand: true,
     },
-    take: 3,
+    take: 6,
   });
 
   /**
@@ -207,7 +207,7 @@ const Products: React.FunctionComponent<{
         ) : (
           <Box css={{ flex: 1 }} />
         )}
-        {(page + 1) * 3 >= productsCount ? (
+        {(page + 1) * 6 >= productsCount ? (
           <Box css={{ flex: 1 }} />
         ) : (
           <Button

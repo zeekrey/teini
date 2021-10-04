@@ -14,7 +14,7 @@ export default async function handler(
   if (req.method === "GET") {
     const page = (req.query.page as string) || "0";
 
-    const pageSize = 3;
+    const pageSize = 6;
 
     const results = await prisma.product.findMany({
       where: {
