@@ -2,10 +2,20 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
 import { getPlaiceholder } from "plaiceholder";
 import path from "path";
+import getConfig from "next/config";
 
 import { promises as fs } from "fs";
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: `file:${path.join(
+        getConfig().serverRuntimeConfig.PROJECT_ROOT,
+        "products.db"
+      )}`,
+    },
+  },
+});
 
 export default async function handler(
   req: NextApiRequest,
