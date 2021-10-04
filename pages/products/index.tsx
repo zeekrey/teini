@@ -1,5 +1,6 @@
 import { GetStaticProps } from "next";
 import { promises as fs } from "fs";
+import React, { useState } from "react";
 import path from "path";
 import { PrismaClient, Prisma } from "@prisma/client";
 import Layout from "../../components/Layout";
@@ -11,6 +12,8 @@ import Footer from "../../components/Footer";
 import MenuBar from "../../components/MenuBar";
 import { NextSeo } from "next-seo";
 import { getPlaiceholder } from "plaiceholder";
+import Button from "../../components/Button";
+import useSWR, { SWRConfig } from "swr";
 
 const prisma = new PrismaClient();
 
@@ -27,6 +30,22 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   } = process.env;
 
   /**
+   * Count the number of products to make pagination work
+   */
+  const {
+    _count: { id: count },
+  } = await prisma.product.aggregate({
+    _count: {
+      id: true,
+    },
+    where: {
+      availability: {
+        not: "notVisible",
+      },
+    },
+  });
+
+  /**
    * Get all products with
    * availability !== notVisible
    */
@@ -39,6 +58,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     include: {
       brand: true,
     },
+    take: 3,
   });
 
   /**
@@ -97,6 +117,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           contact,
           name,
         },
+        productsCount: count,
       },
     };
   } else return { props: {} };
@@ -121,6 +142,34 @@ const Grid = styled("main", {
   },
 });
 
+const ProductsGrid: React.FunctionComponent<{ page: number }> = ({ page }) => {
+  const { data, error } = useSWR<{
+    products: Required<
+      Prisma.ProductUncheckedCreateInput & {
+        brand: Prisma.BrandUncheckedCreateInput;
+      }
+    >[];
+    images: {
+      id: number;
+      images: { paths: string[]; blurDataURLs: string[] };
+    }[];
+  }>(`/api/products?page=${page}`, (url) =>
+    fetch(url).then((res) => res.json())
+  );
+
+  return (
+    <Grid>
+      {data?.products.map((product) => (
+        <ProductCard
+          key={product.id}
+          product={product}
+          images={data.images.filter((image) => image.id === product.id)[0]}
+        />
+      ))}
+    </Grid>
+  );
+};
+
 const Products: React.FunctionComponent<{
   products: Required<
     Prisma.ProductUncheckedCreateInput & {
@@ -129,7 +178,10 @@ const Products: React.FunctionComponent<{
   >[];
   images: { id: number; images: { paths: string[]; blurDataURLs: string[] } }[];
   meta: Tmeta;
-}> = ({ products, images, meta }) => {
+  productsCount: number;
+}> = ({ products, images, meta, productsCount }) => {
+  const [page, setPage] = useState(0);
+
   return (
     <>
       <NextSeo
@@ -144,15 +196,28 @@ const Products: React.FunctionComponent<{
       />
       <MenuBar />
       <PageHeadline>All Products</PageHeadline>
-      <Grid>
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            images={images.filter((image) => image.id === product.id)[0]}
-          />
-        ))}
-      </Grid>
+      <SWRConfig
+        value={{ fallback: { "/api/products?page=0": { products, images } } }}
+      >
+        <ProductsGrid page={page} />
+      </SWRConfig>
+      <Box css={{ display: "flex", justifyContent: "space-between" }}>
+        {page ? (
+          <Button onClick={() => setPage(page - 1)}>Previous</Button>
+        ) : (
+          <Box css={{ flex: 1 }} />
+        )}
+        {(page + 1) * 3 >= productsCount ? (
+          <Box css={{ flex: 1 }} />
+        ) : (
+          <Button
+            css={{ justifySelf: "flex-end" }}
+            onClick={() => setPage(page + 1)}
+          >
+            Next
+          </Button>
+        )}
+      </Box>
       <Footer {...meta} />
     </>
   );
