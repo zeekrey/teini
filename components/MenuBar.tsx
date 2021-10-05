@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { styled, Box } from "../stitches.config";
+import { styled, keyframes, Box } from "../stitches.config";
 import { useCartStore } from "../lib/cart";
 import {
   HomeIcon,
@@ -11,6 +11,18 @@ import {
 import * as Popover from "@radix-ui/react-popover";
 import * as Switch from "@radix-ui/react-switch";
 import { useTheme } from "next-themes";
+import {
+  useEffect,
+  useRef,
+  useCallback,
+  useLayoutEffect,
+  useState,
+} from "react";
+
+const scaleUp = keyframes({
+  "0%": { transform: "scale(1)" },
+  "100%": { transform: "scale(1.5)" },
+});
 
 const Wrapper = styled("div", {
   paddingLeft: "$4",
@@ -47,6 +59,8 @@ const CartSizeIcon = styled("div", {
   borderRadius: "9999px",
   display: "grid",
   placeContent: "center",
+
+  animation: `${scaleUp} 200ms`,
 });
 
 const Item = styled("div", {
@@ -62,6 +76,19 @@ const Item = styled("div", {
 
   "&:focus, &:active": {
     boxShadow: "0px 0px 2px 0px $mauve10",
+  },
+
+  variants: {
+    animate: {
+      true: {
+        animation: `${scaleUp} 200ms`,
+      },
+      false: {},
+    },
+  },
+
+  defaultVariants: {
+    animate: false,
   },
 });
 
@@ -115,6 +142,16 @@ const Label = styled("label", {
 const MenuBar: React.FunctionComponent = () => {
   const { cart } = useCartStore();
   const { theme, setTheme } = useTheme();
+  const [animate, setAnimate] = useState(true);
+
+  useEffect(() => {
+    useCartStore.subscribe(
+      () => setAnimate(true),
+      (state) => [state.cart, state.cart]
+    );
+
+    return () => useCartStore.destroy();
+  }, []);
 
   return (
     <Wrapper>
@@ -127,9 +164,14 @@ const MenuBar: React.FunctionComponent = () => {
               </Item>
             </Link>
             <Link href="/cart" passHref>
-              <Item as="a" aria-label="Link to Cart">
+              <Item
+                as="a"
+                aria-label="Link to Cart"
+                animate={animate}
+                onAnimationEnd={() => setAnimate(false)}
+              >
                 <Box css={{ position: "relative" }}>
-                  <CartSizeIcon>{cart.size}</CartSizeIcon>
+                  {cart && <CartSizeIcon>{cart.size}</CartSizeIcon>}
                   <ArchiveIcon />
                 </Box>
               </Item>
