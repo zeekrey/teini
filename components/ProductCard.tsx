@@ -2,10 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { styled, Box } from "../stitches.config";
 import { Prisma } from "@prisma/client";
-import { useCartStore } from "../lib/cart";
 import { currencyCodeToSymbol } from "../lib/stripeHelpers";
-import { ArrowRightIcon } from "@modulz/radix-icons";
-import Button from "../components/Button";
 
 import PlaceholderImage from "../public/placeholder.png";
 

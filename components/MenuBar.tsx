@@ -11,13 +11,7 @@ import {
 import * as Popover from "@radix-ui/react-popover";
 import * as Switch from "@radix-ui/react-switch";
 import { useTheme } from "next-themes";
-import {
-  useEffect,
-  useRef,
-  useCallback,
-  useLayoutEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
 const scaleUp = keyframes({
   "0%": { transform: "scale(1)" },
