@@ -31,7 +31,7 @@ const ProductPrice = styled("div", {
 });
 
 const ProductBrand = styled("div", {
-  color: "$crimson10",
+  color: "$crimson11",
   fontSize: '12px',
 });
 

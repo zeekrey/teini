@@ -29,8 +29,10 @@ export const cartItemToLineItem = ({
 
 /**
  * This is a singleton to ensure we only instantiate Stripe once.
+ * Use @stripe/stripe-js/pure to delay loading of Stripe.js until Checkout.
  */
-import { Stripe, loadStripe } from "@stripe/stripe-js";
+import { loadStripe } from "@stripe/stripe-js/pure";
+import type { Stripe } from "@stripe/stripe-js";
 
 let stripePromise: Promise<Stripe | null>;
 export const getStripe = () => {

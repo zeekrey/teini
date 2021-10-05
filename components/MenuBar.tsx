@@ -177,7 +177,7 @@ const MenuBar: React.FunctionComponent = () => {
               </Item>
             </Link>
             <Item>
-              <StyledTrigger>
+              <StyledTrigger aria-label="Settings">
                 <GearIcon />
               </StyledTrigger>
             </Item>

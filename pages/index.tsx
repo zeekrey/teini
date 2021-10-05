@@ -1,7 +1,6 @@
 import { GetStaticProps } from "next";
 import Link from "next/link";
 import { PrismaClient, Prisma } from "@prisma/client";
-import { useCartStore } from "../lib/cart";
 import Layout from "../components/Layout";
 import { styled, Box } from "../stitches.config";
 import ProductCard from "../components/ProductCard";
@@ -17,19 +16,6 @@ import { NextSeo } from "next-seo";
 import { getPlaiceholder } from "plaiceholder";
 
 const prisma = new PrismaClient();
-
-const Headline = styled("h1", {
-  fontFamily: "Work Sans, sans serif",
-  fontSize: "32px",
-  color: "$crimson12",
-});
-
-const Subheadline = styled("h1", {
-  fontFamily: "Roboto, sans serif",
-  fontSize: "18px",
-  fontWeight: "normal",
-  color: "$mauve9",
-});
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   /**

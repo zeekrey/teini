@@ -1,7 +1,5 @@
-import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
-import type { NextComponentType } from "next";
 import { globalStyles, darkTheme } from "../stitches.config";
 import { ThemeProvider } from "next-themes";
 import { IdProvider } from "@radix-ui/react-id";
