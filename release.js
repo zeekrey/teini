@@ -4,7 +4,7 @@ module.exports = async (markdown, metaData) => {
   console.log(commits);
 
   const changelog = buildChangelog(commits)
-  return markdown;
+  return changelog;
 };
 
 const buildChangelog = (commits) => {
