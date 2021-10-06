@@ -2,6 +2,7 @@ module.exports = async (markdown, metaData) => {
   const { commits, authors, githubConnection, repoDetails } = metadata;
 
   console.log(commits);
+  throw Error(commit)
 
   const changelog = buildChangelog(commits)
   return changelog;
