@@ -11,11 +11,12 @@ import {
 import * as Popover from "@radix-ui/react-popover";
 import * as Switch from "@radix-ui/react-switch";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const scaleUp = keyframes({
-  "0%": { transform: "scale(1)" },
-  "100%": { transform: "scale(1.5)" },
+  "0%": { transform: "scale(1)", background: "$crimson10" },
+  "50%": { transform: "scale(1.5)" },
+  "100%": { transform: "scale(1)" },
 });
 
 const Wrapper = styled("div", {
@@ -54,7 +55,18 @@ const CartSizeIcon = styled("div", {
   display: "grid",
   placeContent: "center",
 
-  animation: `${scaleUp} 200ms`,
+  variants: {
+    animate: {
+      true: {
+        animation: `${scaleUp} 200ms`,
+      },
+      false: {},
+    },
+  },
+
+  defaultVariants: {
+    animate: false,
+  },
 });
 
 const Item = styled("div", {
@@ -70,19 +82,6 @@ const Item = styled("div", {
 
   "&:focus, &:active": {
     boxShadow: "0px 0px 2px 0px $mauve10",
-  },
-
-  variants: {
-    animate: {
-      true: {
-        animation: `${scaleUp} 200ms`,
-      },
-      false: {},
-    },
-  },
-
-  defaultVariants: {
-    animate: false,
   },
 });
 
@@ -136,11 +135,20 @@ const Label = styled("label", {
 const MenuBar: React.FunctionComponent = () => {
   const { cart } = useCartStore();
   const { theme, setTheme } = useTheme();
-  const [animate, setAnimate] = useState(true);
+  const [animate, setAnimate] = useState(false);
+
+  const isInitialRender = useRef(true);
 
   useEffect(() => {
     useCartStore.subscribe(
-      () => setAnimate(true),
+      () => {
+        // Don't animate on first render.
+        if (isInitialRender.current) {
+          isInitialRender.current = false;
+          return;
+        }
+        setAnimate(true);
+      },
       (state) => [state.cart, state.cart]
     );
 
@@ -158,14 +166,16 @@ const MenuBar: React.FunctionComponent = () => {
               </Item>
             </Link>
             <Link href="/cart" passHref>
-              <Item
-                as="a"
-                aria-label="Link to Cart"
-                animate={animate}
-                onAnimationEnd={() => setAnimate(false)}
-              >
+              <Item as="a" aria-label="Link to Cart">
                 <Box css={{ position: "relative" }}>
-                  {cart && <CartSizeIcon>{cart.size}</CartSizeIcon>}
+                  {cart && (
+                    <CartSizeIcon
+                      animate={animate}
+                      onAnimationEnd={() => setAnimate(false)}
+                    >
+                      {cart.size}
+                    </CartSizeIcon>
+                  )}
                   <ArchiveIcon />
                 </Box>
               </Item>
