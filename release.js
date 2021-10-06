@@ -7,8 +7,10 @@ module.exports = async (markdown, metaData) => {
   return markdown;
 };
 
-const buildChangelog = (sections, authors) => {
+const buildChangelog = (commits) => {
   let text = "";
+
+  console.log(commits)
 
 //   for (const section in sections) {
 //     const changes = sections[section];
