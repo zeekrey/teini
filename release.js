@@ -8,7 +8,7 @@ module.exports = async (markdown, metaData) => {
 };
 
 const buildChangelog = (commits) => {
-  let text = "";
+  let text = "This is the release text";
 
   console.log(commits)
 
