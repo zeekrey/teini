@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "release": "release"
+    "release:patch": "release patch",
+    "release:minor": "release minor",
+    "release:major": "release major"
   },
   "dependencies": {
     "@modulz/radix-icons": "^4.0.0",
