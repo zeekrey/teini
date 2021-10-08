@@ -22,6 +22,7 @@ const Button = styled("button", {
 
   '&:disabled': {
     background: '$crimson2',
+    color: '$crimson6',
     cursor: 'wait'
   }
 });

@@ -8,20 +8,18 @@ generator client {
 }
 
 model Product {
-  id             Int          @id @default(autoincrement())
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  slug           String
-  name           String
-  description    String
-  price          Int
-  currency       String
-  availability   String
-  shippingCode   ShippingCode @relation(fields: [shippingCodeId], references: [id])
-  shippingCodeId Int
-  brand          Brand        @relation(fields: [brandId], references: [id])
-  brandId        Int
-
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  slug          String
+  name          String
+  description   String
+  price         Int
+  currency      String
+  availability  String
+  brand         Brand    @relation(fields: [brandId], references: [id])
+  brandId       Int
+  needsShipping Boolean
 }
 
 model Brand {
@@ -31,15 +29,9 @@ model Brand {
 }
 
 model ShippingCode {
-  id          Int       @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   name        String
   description String
-  Product     Product[]
+  price       Int
+  isFreeFrom  Int
 }
-
-// Enums currently now available for sqlite: https://github.com/prisma/prisma/issues/2219
-// enum Availability {
-//   inStock
-//   outOfStock
-//   notVisible
-// }

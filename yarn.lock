@@ -758,6 +758,16 @@
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-primitive" "0.1.0"
 
+"@radix-ui/react-collection@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-collection/-/react-collection-0.1.0.tgz#0a82b4df4987e10c6ba0a9c4c312dbccd345b7ec"
+  integrity sha512-7rA4o4Y4GSULTqVrUwKOO/9Ih2EsrDKFWz7IYQ2hWot0OEoxP6qJXFNxSDyVKnfvpQutFKPZXoKsh1VmtjQFFA==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/react-compose-refs" "0.1.0"
+    "@radix-ui/react-primitive" "0.1.0"
+    "@radix-ui/react-slot" "0.1.0"
+
 "@radix-ui/react-compose-refs@0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-compose-refs/-/react-compose-refs-0.1.0.tgz#cff6e780a0f73778b976acff2c2a5b6551caab95"
@@ -879,6 +889,38 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-slot" "0.1.0"
+
+"@radix-ui/react-radio-group@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-radio-group/-/react-radio-group-0.1.0.tgz#2e01af024c72fe5163a1dbc1b14bb7522072ce4e"
+  integrity sha512-WjTCIqLBzGaFdxkQfd5+cXv/GdbobqlH3eX9Jg/BSZdGBFejxT+9FN7krl2va7tw0lEA+p7P3yhLf9V3kwKRRQ==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "0.1.0"
+    "@radix-ui/react-compose-refs" "0.1.0"
+    "@radix-ui/react-context" "0.1.0"
+    "@radix-ui/react-label" "0.1.0"
+    "@radix-ui/react-presence" "0.1.0"
+    "@radix-ui/react-primitive" "0.1.0"
+    "@radix-ui/react-roving-focus" "0.1.0"
+    "@radix-ui/react-use-controllable-state" "0.1.0"
+    "@radix-ui/react-use-previous" "0.1.0"
+    "@radix-ui/react-use-size" "0.1.0"
+
+"@radix-ui/react-roving-focus@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-roving-focus/-/react-roving-focus-0.1.0.tgz#af0921f143eb1811307fbdb8ac274011335c85a3"
+  integrity sha512-bCJLjsMRG1tgYcvvMSQOYvgz12NtXJegrsbD8oPdMc4JUY2bcGW+3DkGBoHfbnyL+rvO0DQurLN7fkZEHGbNrA==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "0.1.0"
+    "@radix-ui/react-collection" "0.1.0"
+    "@radix-ui/react-compose-refs" "0.1.0"
+    "@radix-ui/react-context" "0.1.0"
+    "@radix-ui/react-id" "0.1.0"
+    "@radix-ui/react-primitive" "0.1.0"
+    "@radix-ui/react-use-callback-ref" "0.1.0"
+    "@radix-ui/react-use-controllable-state" "0.1.0"
 
 "@radix-ui/react-slot@0.1.0":
   version "0.1.0"

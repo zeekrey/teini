@@ -17,6 +17,7 @@
     "@prisma/client": "^3.2.1",
     "@radix-ui/colors": "^0.1.7",
     "@radix-ui/react-popover": "^0.1.0",
+    "@radix-ui/react-radio-group": "^0.1.0",
     "@radix-ui/react-switch": "^0.1.0",
     "@stitches/react": "^1.2.5",
     "@stripe/stripe-js": "^1.19.1",
