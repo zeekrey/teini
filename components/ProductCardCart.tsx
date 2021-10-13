@@ -129,7 +129,7 @@ const ProductCardCart: React.FunctionComponent<{
             }}
           >
             <CountButton onClick={handleAddItem}>+</CountButton>
-            <Box css={{ textAlign: "center" }}>{product.count}</Box>
+            <Box css={{ textAlign: "center" }} data-testid="productCount">{product.count}</Box>
             <CountButton onClick={handleRemoveItem}>-</CountButton>
           </Box>
         </Box>
