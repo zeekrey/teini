@@ -10,7 +10,8 @@
     "test": "jest",
     "release:patch": "release patch",
     "release:minor": "release minor",
-    "release:major": "release major"
+    "release:major": "release major",
+    "gh:release": "gh release create"
   },
   "dependencies": {
     "@modulz/radix-icons": "^4.0.0",
