@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { styled, keyframes, Box } from "../stitches.config";
-import { useCartStore } from "../lib/cart";
+import { useCart } from "../lib/cart";
 import {
   HomeIcon,
   ArchiveIcon,
@@ -133,27 +133,9 @@ const Label = styled("label", {
 });
 
 const MenuBar: React.FunctionComponent = () => {
-  const { cart } = useCartStore();
+  const { cart } = useCart();
   const { theme, setTheme } = useTheme();
   const [animate, setAnimate] = useState(false);
-
-  const isInitialRender = useRef(true);
-
-  useEffect(() => {
-    useCartStore.subscribe(
-      () => {
-        // Don't animate on first render.
-        if (isInitialRender.current) {
-          isInitialRender.current = false;
-          return;
-        }
-        setAnimate(true);
-      },
-      (state) => [state.cart, state.cart]
-    );
-
-    return () => useCartStore.destroy();
-  }, []);
 
   return (
     <Wrapper>
@@ -173,7 +155,7 @@ const MenuBar: React.FunctionComponent = () => {
                       animate={animate}
                       onAnimationEnd={() => setAnimate(false)}
                     >
-                      {cart.size}
+                      {cart.length}
                     </CartSizeIcon>
                   )}
                   <ArchiveIcon />

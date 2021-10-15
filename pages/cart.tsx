@@ -1,7 +1,7 @@
 import Button, { Loading } from "../components/Button";
 import { styled, Box } from "../stitches.config";
 import { PrismaClient, Prisma } from "@prisma/client";
-import { useCartStore } from "../lib/cart";
+import { useCart } from "../lib/cart";
 import { currencyCodeToSymbol } from "../lib/stripeHelpers";
 import ProductCardCart from "../components/ProductCardCart";
 import { getStripe, cartItemToLineItem } from "../lib/stripeHelpers";
@@ -12,7 +12,7 @@ import { GetStaticProps, NextPage } from "next";
 import { Tmeta } from "../types";
 import MenuBar from "../components/MenuBar";
 import { NextSeo } from "next-seo";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 
 const prisma = new PrismaClient();
@@ -115,35 +115,16 @@ const CartPage: NextPage<{
   meta: Tmeta;
   shippingOptions: Required<Prisma.ShippingCodeUncheckedCreateInput>[];
 }> = ({ meta, shippingOptions }) => {
-  const { cart } = useCartStore();
+  const { cart, productsTotal, needsShipping } = useCart();
   const [isLoading, setIsLoading] = useState(false);
   const [shippingOption, setShippingOption] = useState<
     undefined | false | Required<Prisma.ShippingCodeUncheckedCreateInput>
   >(undefined);
-  const [productsTotal, setProductsTotal] = useState(0);
-  const [cartTotal, setCartTotal] = useState(0);
-  const [cartHasProductsWithShipping, setCartHasProductsWithShipping] =
-    useState<undefined | boolean>(undefined);
+  const [total, setTotal] = useState(productsTotal);
 
   useEffect(() => {
-    setProductsTotal(
-      [...cart.values()].reduce(
-        (total, item) => total + item.price * item.count,
-        0
-      )
-    );
-
-    if ([...cart.values()].filter((item) => item.needsShipping).length)
-      setCartHasProductsWithShipping(true);
-    else {
-      setCartHasProductsWithShipping(false);
-      setShippingOption(false);
-    }
-  }, [cart]);
-
-  useEffect(() => {
-    shippingOption && setCartTotal(productsTotal + (shippingOption?.price || 0));
-  }, [productsTotal, shippingOption]);
+    if (shippingOption) setTotal(productsTotal + shippingOption.price);
+  }, [shippingOption, productsTotal]);
 
   const calcShipping = (value: string) => {
     // Get the whole shippingOption object for the provided value
@@ -214,14 +195,18 @@ const CartPage: NextPage<{
         To protect you and us the checkout will be processed by Stripe.
       </Box>
       <>
-        {cart.size ? (
+        {cart.length ? (
           <>
             <ProductList>
-              {[...cart.values()].map((item) => (
-                <ProductCardCart key={item.id} product={item} />
+              {cart.map((item) => (
+                <ProductCardCart
+                  key={item.product.id}
+                  item={item}
+                  cart={cart}
+                />
               ))}
             </ProductList>
-            {cartHasProductsWithShipping && (
+            {needsShipping && (
               <div>
                 <Box
                   as="p"
@@ -293,8 +278,7 @@ const CartPage: NextPage<{
                     fontSize: "22px",
                   }}
                 >
-                  {currencyCodeToSymbol(cart.values().next().value.currency)}
-                  {cartTotal / 100}
+                  {currencyCodeToSymbol(cart[0].product.currency)} {total / 100}
                 </Box>
               </div>
               <Button

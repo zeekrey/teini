@@ -17,7 +17,7 @@ import CartPage, { getStaticProps } from "../../pages/cart";
 import { Tmeta } from "../../types";
 
 import { PrismaClient, Prisma } from "@prisma/client";
-import { useCartStore } from "../../lib/cart";
+import { useCart, CartProvider } from "../../lib/cart";
 
 const prisma = new PrismaClient();
 
@@ -29,13 +29,16 @@ let products: Map<
 const TestWrapper: React.FunctionComponent<{
   product: Required<Prisma.ProductUncheckedCreateInput>;
 }> = ({ children, product }) => {
-  const { cart, addItem } = useCartStore();
+  const { cart, dispatch } = useCart();
 
   React.useEffect(() => {
-    addItem({ ...product, images: [] }, cart);
-  }, [product, cart, addItem]);
+    dispatch({
+      type: "addItem",
+      item: { product: product, images: [], count: 1 },
+    });
+  }, []);
 
-  return <>{children}</>;
+  return <section>{children}</section>;
 };
 
 beforeAll(() => {
@@ -114,19 +117,16 @@ describe("Test shipping methods", () => {
     };
 
     const { queryByText } = render(
-      <CartPage
-        {...(props as unknown as {
-          meta: Tmeta;
-          shippingOptions: Required<Prisma.ShippingCodeUncheckedCreateInput>[];
-        })}
-      />,
+      <TestWrapper product={products.get("productWithoutShipping")!}>
+        <CartPage
+          {...(props as unknown as {
+            meta: Tmeta;
+            shippingOptions: Required<Prisma.ShippingCodeUncheckedCreateInput>[];
+          })}
+        />
+      </TestWrapper>,
       {
-        wrapper: (props) => (
-          <TestWrapper
-            {...props}
-            product={products.get("productWithoutShipping")!}
-          ></TestWrapper>
-        ),
+        wrapper: CartProvider,
       }
     );
 
@@ -149,19 +149,16 @@ describe("Test shipping methods", () => {
     };
 
     const { queryAllByText } = render(
-      <CartPage
-        {...(props as unknown as {
-          meta: Tmeta;
-          shippingOptions: Required<Prisma.ShippingCodeUncheckedCreateInput>[];
-        })}
-      />,
+      <TestWrapper product={products.get("productHasFreeShipping")!}>
+        <CartPage
+          {...(props as unknown as {
+            meta: Tmeta;
+            shippingOptions: Required<Prisma.ShippingCodeUncheckedCreateInput>[];
+          })}
+        />
+      </TestWrapper>,
       {
-        wrapper: (props) => (
-          <TestWrapper
-            {...props}
-            product={products.get("productHasFreeShipping")!}
-          ></TestWrapper>
-        ),
+        wrapper: (props) => <CartProvider {...props} />,
       }
     );
 
@@ -182,25 +179,21 @@ describe("Test shipping methods", () => {
       };
     };
 
-    const { queryByText } = render(
-      <CartPage
-        {...(props as unknown as {
-          meta: Tmeta;
-          shippingOptions: Required<Prisma.ShippingCodeUncheckedCreateInput>[];
-        })}
-      />,
+    const { queryByText, debug } = render(
+      <TestWrapper product={products.get("productWithShipping")!}>
+        <CartPage
+          {...(props as unknown as {
+            meta: Tmeta;
+            shippingOptions: Required<Prisma.ShippingCodeUncheckedCreateInput>[];
+          })}
+        />
+      </TestWrapper>,
       {
-        wrapper: (props) => (
-          <TestWrapper
-            {...props}
-            product={products.get("productWithShipping")!}
-          ></TestWrapper>
-        ),
+        wrapper: (props) => <CartProvider {...props} />,
       }
     );
 
     const shippingOption = queryByText("Free Shipping");
-
     expect(shippingOption).toBeInTheDocument();
   });
 });

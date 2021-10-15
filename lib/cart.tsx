@@ -1,73 +1,103 @@
-import create from "zustand";
-import { persist } from "zustand/middleware";
 import { Prisma } from "@prisma/client";
-import { replacer, reviver } from "./mapToObject";
+import {
+  createContext,
+  useReducer,
+  FunctionComponent,
+  useContext,
+} from "react";
 
-type CartState = {
-  cart:
-    | Map<
-        number,
-        Required<
-          Prisma.ProductUncheckedCreateInput & {
-            count: number;
-          }
-        > & { images?: { path: string; blurDataURL: string }[] }
-      >
-    | Map<any, any>;
-  removeItem: (
-    item: Required<Prisma.ProductUncheckedCreateInput> & {
-      images?: { path: string; blurDataURL: string }[];
-    },
-    cart: Map<number, Prisma.ProductUncheckedCreateInput & { count: number }>
-  ) => void;
-  addItem: (
-    item: Required<Prisma.ProductUncheckedCreateInput> & {
-      images?: { path: string; blurDataURL: string }[];
-    },
-    cart: Map<
-      number,
-      Prisma.ProductUncheckedCreateInput & {
-        count: number;
-        images?: { path: string; blurDataURL: string }[];
-      }
-    >
-  ) => void;
-  clearCart: () => void;
+export type CartItem = {
+  product: Required<Prisma.ProductUncheckedCreateInput>;
+  count: number;
+  images?: { path: string; blurDataURL: string }[];
 };
 
-export const useCartStore = create<CartState>(
-  persist(
-    (set, get) => ({
-      cart: new Map(),
-      removeItem: (item, cart) => {
-        // Use non-null assertion because of https://github.com/microsoft/TypeScript/issues/41045#issuecomment-706722695
-        if (cart.size && cart.get(item.id)!.count > 1)
-          set((state) => {
-            state.cart.get(item.id)!.count--;
-          });
-        else
-          set((state) => {
-            state.cart.delete(item.id);
-          });
-      },
-      addItem: (item, cart) => {
-        if (cart.has(item.id))
-          set((state) => {
-            state.cart.get(item.id)!.count++;
-          });
-        else
-          set((state) => {
-            state.cart.set(item.id, { ...item, count: 1 });
-          });
-      },
-      clearCart: () => {
-        set(({ cart }) => cart.clear());
-      },
-    }),
-    {
-      name: "cart-storage",
-      serialize: (state) => JSON.stringify(state, replacer),
-      deserialize: (str) => JSON.parse(str, reviver),
+type CartAction =
+  | { type: "removeItem"; item: CartItem }
+  | { type: "addItem"; item: CartItem }
+  | { type: "clearCart" };
+type Dispatch = (action: CartAction) => void;
+
+type CartState = CartItem[] | [];
+
+const CartContext = createContext<
+  { cart: CartState; dispatch: Dispatch } | undefined
+>(undefined);
+
+const cartReducer = (cart: CartState, action: CartAction) => {
+  switch (action.type) {
+    case "addItem": {
+      // Find the index of the given product
+      const foundProductIndex = cart.findIndex(
+        (_item) => _item.product.id === action.item.product.id
+      );
+
+      // If the product was found, increse the count by 1
+      if (foundProductIndex > -1) {
+        cart[foundProductIndex].count++;
+
+        // Return a copy of the array, otherwise react won't rerender.
+        return [...cart];
+      }
+      // If the product wasn't found, add it to the cart array
+      else {
+        return [...cart, { ...action.item, count: 1 }];
+      }
     }
-  )
-);
+    case "removeItem": {
+      // Find the index of the given product
+      const foundProductIndex = cart.findIndex(
+        (_item) => _item.product.id === action.item.product.id
+      );
+
+      // If the product has a count > 1, reduce the count by one
+      if (foundProductIndex > -1 && cart[foundProductIndex].count > 1) {
+        cart[foundProductIndex].count--;
+        // Return a copy of the array, otherwise react won't rerender.
+        return [...cart];
+      }
+      // If the product has a count === 1, remove the product from cart
+      else {
+        cart.splice(foundProductIndex, 1);
+        // Return a copy of the array, otherwise react won't rerender.
+        return [...cart];
+      }
+    }
+    case "clearCart": {
+      return []
+    }
+    default: {
+      throw new Error(`Unhandled action type: ${JSON.stringify(action)}`);
+    }
+  }
+};
+
+const CartProvider: FunctionComponent = ({ children }) => {
+  const [cart, dispatch] = useReducer(cartReducer, []);
+
+  const value = { cart, dispatch };
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+};
+
+const useCart = () => {
+  const context = useContext(CartContext);
+
+  if (context === undefined)
+    throw new Error("useCart must be used within CartProvider");
+
+  // Get the total price for all products in cart
+  // @ts-ignore
+  const productsTotal: number = context.cart.reduce(
+    (total: number, item: CartItem) => total + item.product.price * item.count,
+    0
+  );
+
+  const needsShipping = !!context.cart.filter(
+    (item) => item.product.needsShipping
+  ).length;
+
+  return { ...context, productsTotal, needsShipping };
+};
+
+export { CartProvider, useCart };

@@ -2,9 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { styled, Box } from "../stitches.config";
 import { Prisma } from "@prisma/client";
-import { useCartStore } from "../lib/cart";
+import { useCart } from "../lib/cart";
 import { currencyCodeToSymbol } from "../lib/stripeHelpers";
 import PlaceholderImage from "../public/placeholder.png";
+
+import type { CartItem } from "../lib/cart";
+import { useEffect, useState, useCallback } from "react";
 
 const Wrapper = styled("div", {
   boxShadow:
@@ -65,33 +68,40 @@ const ImageContainer = styled("a", {
 });
 
 const ProductCardCart: React.FunctionComponent<{
-  product: Required<Prisma.ProductUncheckedCreateInput> & {
-    count?: number;
-    images: { path: string; blurDataURL: string }[];
-  };
-}> = ({ product }) => {
-  const { cart, addItem, removeItem } = useCartStore();
+  item: CartItem;
+  cart: CartItem[];
+}> = ({ item }) => {
+  const { cart, dispatch } = useCart();
+  const { product, images } = item;
+
+  const count = cart.find((p) => p.product.id === item.product.id)?.count ?? 0;
 
   const handleAddItem = () => {
-    addItem(product, cart);
+    dispatch({
+      type: "addItem",
+      item: { product: product, images: [...(images ?? [])], count: 1 },
+    });
   };
 
   const handleRemoveItem = () => {
-    removeItem(product, cart);
+    dispatch({
+      type: "removeItem",
+      item: { product: product, images: [...(images ?? [])], count: 1 },
+    });
   };
   return (
     <Wrapper>
       <Box css={{ display: "flex", flex: 1 }}>
         <Link href={`/products/${product.slug}`} passHref>
           <ImageContainer>
-            {product.images.length ? (
+            {images?.length ? (
               <Image
-                src={product.images[0].path}
+                src={images[0].path}
                 layout="fill"
                 objectFit="cover"
-                alt={product.images[0].path}
+                alt={images[0].path}
                 placeholder="blur"
-                blurDataURL={product.images[0].blurDataURL}
+                blurDataURL={images[0].blurDataURL}
               />
             ) : (
               <Image
@@ -129,7 +139,9 @@ const ProductCardCart: React.FunctionComponent<{
             }}
           >
             <CountButton onClick={handleAddItem}>+</CountButton>
-            <Box css={{ textAlign: "center" }} data-testid="productCount">{product.count}</Box>
+            <Box css={{ textAlign: "center" }} data-testid="productCount">
+              {count}
+            </Box>
             <CountButton onClick={handleRemoveItem}>-</CountButton>
           </Box>
         </Box>
