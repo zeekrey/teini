@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import { globalStyles, darkTheme } from "../stitches.config";
 import { ThemeProvider } from "next-themes";
 import { IdProvider } from "@radix-ui/react-id";
+import { CartProvider } from "../lib/cart";
 
 type NextPageWithLayout = NextPage & {
   layout: React.FunctionComponent;
@@ -25,9 +26,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           light: "light",
         }}
       >
-        <PageLayout>
-          <Component {...pageProps} />
-        </PageLayout>
+        <CartProvider>
+          <PageLayout>
+            <Component {...pageProps} />
+          </PageLayout>
+        </CartProvider>
       </ThemeProvider>
     </IdProvider>
   );

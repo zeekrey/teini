@@ -7,7 +7,7 @@ import { NextSeo } from "next-seo";
 import { GetStaticProps, NextPage } from "next";
 import Image from "next/image";
 import MenuBar from "../components/MenuBar";
-import { useCartStore } from "../lib/cart";
+import { useCart } from "../lib/cart";
 import { Tmeta } from "../types";
 import Footer from "../components/Footer";
 import SuccessImage from "../public/jason-dent-WNVGLwGMCAg-unsplash.jpg";
@@ -103,7 +103,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
 
 const Confirmation: NextPage<{ meta: Tmeta }> = ({ meta }) => {
-  const { clearCart } = useCartStore();
+  const { dispatch } = useCart();
   const router = useRouter();
 
   const { data, error } = useSWR(
@@ -115,8 +115,8 @@ const Confirmation: NextPage<{ meta: Tmeta }> = ({ meta }) => {
 
   useEffect(() => {
     // If checkout is completed, the cart should be cleared.
-    clearCart();
-  }, [clearCart]);
+    dispatch({ type: "clearCart" });
+  }, []);
 
   /**
    * Data for buyer

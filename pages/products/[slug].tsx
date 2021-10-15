@@ -6,7 +6,7 @@ import { PrismaClient, Prisma } from "@prisma/client";
 import Button from "../../components/Button";
 import MenuBar from "../../components/MenuBar";
 import { styled, Box } from "../../stitches.config";
-import { useCartStore } from "../../lib/cart";
+import { useCart } from "../../lib/cart";
 import { currencyCodeToSymbol } from "../../lib/stripeHelpers";
 import PlaceholderImage from "../../public/placeholder.png";
 import { Tmeta } from "../../types";
@@ -206,10 +206,13 @@ const ProductPage: NextPage<{
   images: { path: string; blurDataURL: string }[];
   meta: Tmeta;
 }> = ({ product, images, meta }) => {
-  const { cart, addItem } = useCartStore();
+  const { cart, dispatch } = useCart();
 
   const handleAddToCart = () => {
-    addItem({ ...product, images: [...images] }, cart);
+    dispatch({
+      type: "addItem",
+      item: { product: product, images: [...images], count: 1 },
+    });
   };
 
   return (
@@ -266,6 +269,7 @@ const ProductPage: NextPage<{
         </Box>
       </Box>
       <MenuBar />
+      <pre>{JSON.stringify(cart)}</pre>
       <Footer {...meta} />
     </LayoutWrapper>
   );

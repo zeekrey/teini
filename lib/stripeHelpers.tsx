@@ -1,19 +1,20 @@
 import { Prisma } from "@prisma/client";
+import type { CartItem } from "./cart";
 
 export const cartItemToLineItem = ({
   cartItem,
   images,
 }: {
-  cartItem: Required<Prisma.ProductUncheckedCreateInput & { count: number }>;
+  cartItem: CartItem;
   images: string[];
 }) => {
   return {
     price_data: {
-      currency: cartItem.currency, //ISO Code https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/amendments/lists/list_one.xml
-      unit_amount_decimal: cartItem.price,
+      currency: cartItem.product.currency, //ISO Code https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/amendments/lists/list_one.xml
+      unit_amount_decimal: cartItem.product.price,
       product_data: {
-        name: cartItem.name,
-        description: cartItem.description,
+        name: cartItem.product.name,
+        description: cartItem.product.description,
         images: ["urlToImage"],
         // meta: { key: "value" },
         // tax_code: "dqwd", // https://stripe.com/docs/tax/tax-codes
