@@ -269,7 +269,6 @@ const ProductPage: NextPage<{
         </Box>
       </Box>
       <MenuBar />
-      <pre>{JSON.stringify(cart)}</pre>
       <Footer {...meta} />
     </LayoutWrapper>
   );
