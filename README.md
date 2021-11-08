@@ -1,10 +1,16 @@
 # Teini
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzeekrey%2Fteini&env=STRIPE_SECRET_KEY,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,SHOP_NAME,SHOP_CONTACT,SHOP_HEADLINE,SHOP_SUBHEADLINE&envDescription=You'll%20need%20Stripe%20API%20key.&envLink=https%3A%2F%2Fstripe.com%2Fdocs%2Fkeys&project-name=teini-copy&repo-name=teini-copy&redirect-url=https%3A%2F%2Fkrey.io&demo-title=Teini%20-%20The%20smallest%20eShop%20in%20the%20world&demo-description=A%20real%20online%20store.%20But%20without%20the%20costs%20and%20without%20complexity.&demo-url=https%3A%2F%2Fteini.co&demo-image=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1494256997604-768d1f608cac%3Fixid%3DMnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8%26ixlib%3Drb-1.2.1%26auto%3Dformat%26fit%3Dcrop%26w%3D1829%26q%3D80) 
+> Teini (tiny, [ˈtīnē]) is an extremely small webshop leveraging awesome and free solutions like Github and Vercel.
+
+Main purpose is to get you started fast and cheap. Hit the deploy button to create your own version of Teini or see a working demo here: https://teini.vercel.app/
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzeekrey%2Fteini&env=STRIPE_SECRET_KEY,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,SHOP_NAME,SHOP_CONTACT,SHOP_HEADLINE,SHOP_SUBHEADLINE&envDescription=You'll%20need%20Stripe%20API%20key.&envLink=https%3A%2F%2Fstripe.com%2Fdocs%2Fkeys&project-name=teini-copy&repo-name=teini-copy&redirect-url=https%3A%2F%2Fkrey.io&demo-title=Teini%20-%20The%20smallest%20eShop%20in%20the%20world&demo-description=A%20real%20online%20store.%20But%20without%20the%20costs%20and%20without%20complexity.&demo-url=https%3A%2F%2Fteini.co&demo-image=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1494256997604-768d1f608cac%3Fixid%3DMnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8%26ixlib%3Drb-1.2.1%26auto%3Dformat%26fit%3Dcrop%26w%3D1829%26q%3D80)
 
 ## Installation
 
 ### ...if you're not a developer
+
+> 💡 If you need help at any stage contact me. If you want me to setup Teini contact me as well.
 
 #### Accounts needed
 
@@ -90,7 +96,6 @@ If your go to https://vercel.com and open your project you should see that a dep
 ### ...if you're a developer
 
 Clone, Edit, Push. Do what ever you want.
-
 
 ## Notes
 
