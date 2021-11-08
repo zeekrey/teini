@@ -4,4 +4,5 @@ module.exports = {
   serverRuntimeConfig: {
     PROJECT_ROOT: __dirname,
   },
+  swcMinify: true,
 };
